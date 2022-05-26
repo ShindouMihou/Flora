@@ -5,6 +5,6 @@ An simple, markdown-based blog platform written completely in Typescript, Svelte
 Flora is far from reaching stable release and at the moment is on development versions with the following features and functionalities implemented or missing:
 - [x] Home (`/`) and Post (`/posts/:id`) pages.
 - [x] HTTP API for getting posts and creating posts.
-- [ ] HTTP API for creating new posts, deleting posts and updating posts.
-- [ ] HTTP API for media flow with [Silva](https://github.com/ShindouMihou/Silva)
+- [x] HTTP API for creating new posts, deleting posts and updating posts.
+- [x] HTTP API for media flow with [Silva](https://github.com/ShindouMihou/Silva)
 - [ ] Editor (`/editor/:id`) and Creator Dashboard (`/creator/`)

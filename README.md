@@ -1,38 +1,10 @@
-# create-svelte
+# Flora
+An simple, markdown-based blog platform written completely in Typescript, Sveltekit and Tailwind. Flora utilizes multiple technologies such as MongoDB and its sister application [Silva](https://github.com/ShindouMihou/Silva) for storing the posts and also for managing the images. Unlike other platforms, Flora aims to be simple and minimal but still being beautiful with the help of tools like Bionic Reading to enable superior reading speeds.
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
-
-## Creating a project
-
-If you're seeing this, you've probably already done this step. Congrats!
-
-```bash
-# create a new project in the current directory
-npm init svelte
-
-# create a new project in my-app
-npm init svelte my-app
-```
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+## State of Flora
+Flora is far from reaching stable release and at the moment is on development versions with the following features and functionalities implemented or missing:
+- [x] Home (`/`) and Post (`/posts/:id`) pages.
+- [x] HTTP API for getting posts and creating posts.
+- [ ] HTTP API for creating new posts, deleting posts and updating posts.
+- [ ] HTTP API for media flow with [Silva](https://github.com/ShindouMihou/Silva)
+- [ ] Editor (`/editor/:id`) and Creator Dashboard (`/creator/`)

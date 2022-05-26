@@ -26,8 +26,17 @@
   },
   "type": "module",
   "dependencies": {
+    "@types/highlight.js": "^10.1.0",
+    "@types/marked": "^4.0.3",
+    "@types/node-emoji": "^1.8.1",
     "axios": "^0.27.2",
     "dotenv": "^16.0.1",
-    "mongodb": "^4.6.0"
+    "highlight.js": "^11.5.1",
+    "jsonwebtoken": "^8.5.1",
+    "lorem-ipsum": "^2.0.4",
+    "marked": "^4.0.16",
+    "mongodb": "^4.6.0",
+    "node-emoji": "^1.11.0",
+    "winston": "^3.7.2"
   }
 }

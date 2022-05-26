@@ -2,3 +2,93 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.monst {
+    font-family: 'Montserrat', sans-serif;
+}
+
+.opensans {
+    font-family: 'Open Sans', sans-serif;
+}
+
+@layer base {
+    .mkdown a {
+        @apply text-blue-400 hover:opacity-90 transition-[250ms] hover:underline underline-offset-4;
+    }
+    
+    .mkdown button {
+        @apply hover:opacity-90 transition-[250ms];
+    }
+
+    .mkdown pre {
+        @apply bg-neutral-700 rounded-sm p-2 my-4 whitespace-pre-wrap break-all text-white;
+    }
+
+    .mkdown code {
+        @apply bg-neutral-700 rounded-sm p-1 whitespace-pre-wrap break-all;
+    }
+
+    .mkdown p {
+        @apply leading-normal mb-4 text-xl;
+    }
+
+    .mkdown a, .mkdown li, .mkdown p, .mkdown code {
+        @apply text-base break-words;
+    }
+
+    .mkdown ol {
+        @apply list-decimal;
+    }
+
+    .mkdown ul {
+        @apply list-disc;
+    }
+
+    .mkdown ol, .mkdown ul {
+        @apply px-12 leading-normal my-2;
+    }
+
+    .mkdown h6 {
+        @apply text-[.85rem] text-gray-400;
+    }
+
+    .mkdown h5 {
+        @apply text-sm;
+    }
+
+    .mkdown h4 {
+        @apply text-base;
+    }
+
+    .mkdown h3 {
+        @apply text-xl;
+    }
+
+    .mkdown h2 {
+        @apply text-2xl;
+    }
+
+    .mkdown h1 {
+        @apply text-3xl;
+    }
+
+    .mkdown h1, .mkdown h2 {
+        @apply border-b-[1px] border-b-neutral-700 pb-6;
+    }
+
+    .mkdown h1, .mkdown h2, .mkdown h3, .mkdown h4, .mkdown h5, .mkdown h6 {
+        @apply font-semibold my-6 leading-5;
+    }
+
+    .mkdown blockquote {
+        @apply p-6 px-12 border-l-neutral-600 border-l-4 bg-neutral-800 my-4;
+    }
+
+    .mkdown img {
+        @apply max-w-[35%] align-middle;
+    }
+
+    .mkdown hr {
+        @apply h-1 p-0 my-6 border-0 bg-gray-600;
+    }
+}

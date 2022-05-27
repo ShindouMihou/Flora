@@ -1,4 +1,3 @@
-import bionify from "$lib/bionic/translator";
 import mongo from "$lib/mongo";
 import { ObjectId } from "mongodb";
 import type FloraModel from "./plain";

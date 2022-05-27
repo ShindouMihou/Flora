@@ -34,9 +34,7 @@
     import { marked } from "marked";
     import hljs from "highlight.js";
     import PostLoading from "$lib/components/PostLoading.svelte";
-    import { onMount } from "svelte";
     import ErrorBlock from "$lib/components/ErrorBlock.svelte";
-    import bionify from "$lib/bionic/translator";
     import removeMarkdown from "remove-markdown";
 
     export let title: string;
@@ -48,12 +46,6 @@
 
     if (metaDescription.length > 162)
         metaDescription = metaDescription.slice(0, 162) + "...";
-
-    onMount(() => {
-        if (localStorage.getItem("bionic") === "true") {
-            content = bionify(content);
-        }
-    });
 </script>
 
 <svelte:head>

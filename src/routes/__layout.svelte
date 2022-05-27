@@ -16,13 +16,11 @@
   let bannerVisibility = 'false';
   let settings = "hidden";
 
-  let bionic = false;
   let darkMode = import.meta.env.VITE_DARK_MODE === 'true' ?? false;
 
   export let authenticated: boolean;
 
   onMount(() => {
-    bionic = localStorage.getItem("bionic") === 'true' || false;
     darkMode = localStorage.getItem("theme") === 'dark' || (import.meta.env.VITE_DARK_MODE === 'true' ?? false);
 
     bannerVisibility = localStorage.getItem('floraBanner') ?? (import.meta.env.VITE_FLORA_BANNER ?? 'true')
@@ -43,7 +41,6 @@
   }
 
   function saveSettings() {
-    localStorage.setItem('bionic', document.getElementById('bionic').checked)
     localStorage.setItem('theme', document.getElementById('dark-mode').checked ? 'dark' : 'light')
 
     setTimeout(() => window.location.reload(), 100)
@@ -95,10 +92,6 @@
       </button>
     </div>   
     <div class="flex flex-col gap-4">
-      <div class="flex flex-row gap-2 items-center">
-        <input type="checkbox" id="bionic" class="p-4 rounded-full outline-none" bind:checked={bionic}/>
-        <p>Bionic Reading</p>
-      </div>
       <div class="flex flex-row gap-2 items-center">
         <input type="checkbox" id="dark-mode" class="p-4 rounded-full outline-none" bind:checked={darkMode}/>
         <p>Dark Mode</p>

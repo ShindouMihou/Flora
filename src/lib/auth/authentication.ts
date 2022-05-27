@@ -1,4 +1,4 @@
-import * as jwt from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import configuration from "$lib/configuration";
 
 export function sign(): string {

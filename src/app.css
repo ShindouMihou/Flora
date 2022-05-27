@@ -11,6 +11,10 @@
     font-family: 'Open Sans', sans-serif;
 }
 
+.mkdown h1, .mkdown h2, .mkdown h3 {
+    font-family: 'Montserrat', sans-serif;
+}
+
 @layer base {
     .mkdown a {
         @apply text-blue-400 hover:opacity-90 transition-[250ms] hover:underline underline-offset-4;
@@ -21,11 +25,11 @@
     }
 
     .mkdown pre {
-        @apply bg-neutral-700 rounded-sm p-2 my-4 whitespace-pre-wrap break-all text-white;
+        @apply bg-black rounded-md p-2 my-4 whitespace-pre-wrap break-all text-white;
     }
 
     .mkdown code {
-        @apply bg-neutral-700 rounded-sm p-1 whitespace-pre-wrap break-all;
+        @apply bg-black rounded-md p-1 whitespace-pre-wrap break-all;
     }
 
     .mkdown p {
@@ -73,7 +77,7 @@
     }
 
     .mkdown h1, .mkdown h2 {
-        @apply border-b-[1px] border-b-neutral-700 pb-6;
+        @apply border-b-neutral-700;
     }
 
     .mkdown h1, .mkdown h2, .mkdown h3, .mkdown h4, .mkdown h5, .mkdown h6 {

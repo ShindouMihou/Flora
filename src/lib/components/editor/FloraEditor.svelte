@@ -1,7 +1,6 @@
 <script lang="ts">
     import { emojis } from "$lib/content";
     import axios from "axios";
-import DOMPurify from "dompurify";
     import hljs from "highlight.js";
 
     import { marked } from "marked";
@@ -438,7 +437,7 @@ import DOMPurify from "dompurify";
                     class="{markdownClass} text-2xl min-h-screen resize-none py-2 mkdown open-sans"
                     id="markdown"
                 >
-                {@html DOMPurify.sanitize(marked(emojis(content), {
+                {@html marked(emojis(content), {
                     smartypants: true,
                     gfm: true,
                     highlight: (code, lang) => {
@@ -448,7 +447,7 @@ import DOMPurify from "dompurify";
         
                         return hljs.highlight(lang, code).value;
                     }
-                }))}
+                })}
                 </div>
                 <textarea
                     class="text-neutral-50 bg-neutral-900 outline-none text-base placeholder:text-neutral-600 min-h-screen resize-none selection:text-black selection:bg-white {textEditorClass}"

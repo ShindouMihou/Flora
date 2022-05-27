@@ -1,22 +1,32 @@
 <script context="module" lang="ts">
-    export async function load({ params }) {
-        try {
-            const response = await axios.get(`/api/posts/${params.id}`);
+    import type { Load } from "@sveltejs/kit";
 
-            return {
-                props: {
-                    title: response.data.title,
-                    image: response.data.image,
-                    content: response.data.content,
-                },
-            };
+    export const load: Load = async ({ params, fetch }) => {
+        try {
+            const response = await fetch(`/api/posts/${params.id}`).then(result => result.json());
+
+            if (!response.error) {
+                return {
+                    props: {
+                        title: response.title,
+                        image: response.image,
+                        content: response.content,
+                    },
+                };
+            } else {
+                return {
+                    status: 302,
+                    redirect: "/",
+                };
+            }
         } catch (err: any) {
+            console.error(err);
             return {
                 status: 302,
                 redirect: "/",
             };
         }
-    }
+    };
 </script>
 
 <script lang="ts">
@@ -25,11 +35,9 @@
     import hljs from "highlight.js";
     import PostLoading from "$lib/components/PostLoading.svelte";
     import { onMount } from "svelte";
-    import axios from "axios";
     import ErrorBlock from "$lib/components/ErrorBlock.svelte";
-    import DOMPurify from "dompurify";
     import bionify from "$lib/bionic/translator";
-    import removeMarkdown from 'remove-markdown';
+    import removeMarkdown from "remove-markdown";
 
     export let title: string;
     export let image: string;
@@ -38,22 +46,23 @@
     let errors: string[] = [];
     let metaDescription: string = removeMarkdown(content);
 
-    if (metaDescription.length > 162) metaDescription = metaDescription.slice(0, 162) + "..."
+    if (metaDescription.length > 162)
+        metaDescription = metaDescription.slice(0, 162) + "...";
 
     onMount(() => {
-        if (localStorage.getItem('bionic') === 'true') {
+        if (localStorage.getItem("bionic") === "true") {
             content = bionify(content);
         }
     });
 </script>
 
 <svelte:head>
-    <meta name="title" content="{title}"/>
-    <meta name="image" content="{image}"/>
-    <meta name="og:image" content="{image}"/>
-    <meta name="description" content="{metaDescription}"/>
-    <meta name="og:type" content="article"/>
-    <meta name="article:author" content="{ import.meta.env.VITE_DISPLAY_NAME }"/>
+    <meta name="title" content={title} />
+    <meta name="image" content={image} />
+    <meta name="og:image" content={image} />
+    <meta name="description" content={metaDescription} />
+    <meta name="og:type" content="article" />
+    <meta name="article:author" content={import.meta.env.VITE_DISPLAY_NAME} />
     <link
         rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/styles/atom-one-dark.min.css"
@@ -82,19 +91,17 @@
             </p>
         </div>
         <div class="mkdown flex flex-col gap-1 opensans">
-            {@html DOMPurify.sanitize(
-                marked(emojis(content), {
-                    smartypants: true,
-                    gfm: true,
-                    highlight: (code, lang) => {
-                        if (lang == "") {
-                            return hljs.highlightAuto(code).value;
-                        }
+            {@html marked(emojis(content), {
+                smartypants: true,
+                gfm: true,
+                highlight: (code, lang) => {
+                    if (lang == "") {
+                        return hljs.highlightAuto(code).value;
+                    }
 
-                        return hljs.highlight(lang, code).value;
-                    },
-                })
-            )}
+                    return hljs.highlight(lang, code).value;
+                },
+            })}
         </div>
     {:else}
         <PostLoading />

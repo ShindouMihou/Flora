@@ -77,6 +77,7 @@
 
     // This is a lock to prevent saving too much.
     let lock = false;
+    let showSaving = false;
 
     // The current text modew: 0 = raw, 1 = preview.
     let mode = 0;
@@ -159,6 +160,7 @@
         }
 
         lock = true;
+        showSaving = true;
 
         if (postId === null) {
             axios
@@ -175,10 +177,12 @@
                     url.pathname = "/editor/" + postId;
                     window.history.pushState({}, "", url);
                     lock = false;
+                    setTimeout(() => showSaving = false, 1000);
                 })
                 .catch((error) => {
                     setTimeout(() => {
                         lock = false;
+                        setTimeout(() => showSaving = false, 1000);
                         let tempErrors = [];
                         if (error.response) {
                             tempErrors.push(
@@ -209,10 +213,12 @@
                 })
                 .then((result) => {
                     lock = false;
+                    setTimeout(() => showSaving = false, 1000);
                 })
                 .catch((error) => {
                     setTimeout(() => {
                         lock = false;
+                        setTimeout(() => showSaving = false, 1000);
                         let tempErrors = [];
                         if (error.response) {
                             tempErrors.push(
@@ -268,7 +274,7 @@
         <ErrorBlock message={error} />
     {/each}
 {/if}
-{#if lock}
+{#if showSaving}
     <div class="fixed bottom-5 z-50">
         <div
             id="saving-context"

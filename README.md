@@ -6,4 +6,5 @@ Flora is far from reaching stable release and at the moment is on development ve
 - [x] Home (`/`) and Post (`/posts/:id`) pages.
 - [x] HTTP API for getting posts and creating posts.
 - [x] HTTP API for creating new posts, deleting posts and updating posts.
+- [ ] Transpiler for .md files to .svelte files to enable static generated sites.
 - [ ] Editor (`/editor/:id`) and Creator Dashboard (`/creator/`)

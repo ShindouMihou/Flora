@@ -81,7 +81,7 @@
     }
 
     .mkdown h1, .mkdown h2, .mkdown h3, .mkdown h4, .mkdown h5, .mkdown h6 {
-        @apply font-semibold my-6 leading-5;
+        @apply font-semibold my-6;
     }
 
     .mkdown blockquote {

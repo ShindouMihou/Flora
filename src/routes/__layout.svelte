@@ -1,11 +1,27 @@
+<script context="module">
+  export async function load({ session }) {
+      return {
+        props: {
+          authenticated: session.authenticated
+        }
+      };
+  }
+</script>
+
 <script>
   import "../app.css";
-  import { Heart, Icon, X } from 'svelte-hero-icons'
-import { onMount } from "svelte";
+  import { Adjustments, Folder, Heart, Icon, X } from 'svelte-hero-icons'
+  import { onMount } from "svelte";
 
   let bannerVisibility = 'false';
+  let settings = "hidden";
+
+  let bionic = false;
+
+  export let authenticated;
 
   onMount(() => {
+    bionic = localStorage.getItem("bionic") === 'true' || false
     bannerVisibility = localStorage.getItem('floraBanner') ?? (import.meta.env.VITE_FLORA_BANNER ?? 'true')
   });
 
@@ -13,9 +29,28 @@ import { onMount } from "svelte";
     localStorage.setItem('floraBanner', 'false')
     bannerVisibility = 'false';
   }
+
+  function toggleSettings() {
+    if (settings) {
+      settings = "";
+      return;
+    }
+
+    settings = "hidden";
+  }
+
+  function saveSettings() {
+    localStorage.setItem('bionic', document.getElementById('bionic').checked)
+    setTimeout(() => window.location.reload(), 500)
+  }
 </script>
 
-<div id="container" class="py-6 px-6 md:px-12 flex flex-col w-full m-auto max-w-[2168px]">
+<svelte:head>
+  <link rel="icon" href="{ import.meta.env.VITE_FAVICON }" />
+</svelte:head>
+
+
+<div id="container" class="py-6 px-6 md:px-44 flex flex-col w-full m-auto max-w-[2168px]">
   {#if bannerVisibility === 'true'}
   <div id="made-with-flora" class="flex flex-row justify-between items-center w-full bg-blue-200 p-2 mb-4 text-black rounded-sm">
     <a class="flex flex-row gap-1 items-center" href="https://github.com/ShindouMihou/Flora" rel="external" target="_blank">
@@ -28,15 +63,39 @@ import { onMount } from "svelte";
   </div>
   {/if}
   <nav id="navigator" class="flex flex-col gap-2">
-    <div class="flex flex-row gap-2">
-      <a href="/">
-        <h1 class="font-bold text-2xl uppercase monst">
-          {import.meta.env.VITE_APP_NAME}
-        </h1>
+    <div class="flex flex-row gap-2 justify-between items-center">
+      <div class="flex flex-row gap-2 flex-grow">
+        <a href="/">
+          <h1 class="font-bold text-2xl uppercase monst">
+            {import.meta.env.VITE_APP_NAME}
+          </h1>
+        </a>
+      </div>
+      {#if authenticated}
+      <a href="/creator/">
+        <Icon src={Folder} class="h-6 w-6 flex-shrink-0 text-black my-3" solid></Icon>
       </a>
-      <input type="text" placeholder="Find anything." class="outline-none opensans" id="search_bar"/>
+      {/if}
+      <button on:click={toggleSettings}>
+        <Icon src={Adjustments} class="h-6 w-6 flex-shrink-0 text-black my-3"></Icon>
+      </button>
     </div>
   </nav>
+  <div class="flex flex-col gap-2 border rounded-lg p-2 w-full {settings}">
+    <div class="flex flex-row justify-between">
+      <h3 class="font-bold uppercase monst">Settings</h3>
+      <button on:click={toggleSettings}>
+        <Icon src={X} solid class="text-black w-[1.10rem] flex-shrink-0"></Icon>
+      </button>
+    </div>   
+    <div class="flex flex-col gap-4">
+      <div class="flex flex-row gap-2 items-center">
+        <input type="checkbox" id="bionic" class="p-4 rounded-full outline-none" bind:checked={bionic}/>
+        <p>Bionic Reading</p>
+      </div>
+    </div>
+    <button class="bg-black text-white p-1 mt-2" on:click={saveSettings}>Save</button>
+  </div>
   <main class="py-6">
     <slot></slot>
   </main>

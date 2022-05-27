@@ -26,6 +26,7 @@
   },
   "type": "module",
   "dependencies": {
+    "@sveltejs/adapter-node": "^1.0.0-next.76",
     "@types/cookie": "^0.5.1",
     "@types/cookie-signature": "^1.0.4",
     "@types/dompurify": "^2.3.3",
@@ -33,6 +34,7 @@
     "@types/jsonwebtoken": "^8.5.8",
     "@types/marked": "^4.0.3",
     "@types/node-emoji": "^1.8.1",
+    "@types/remove-markdown": "^0.3.1",
     "axios": "^0.27.2",
     "cookie": "^0.5.0",
     "cookie-signature": "^1.2.0",
@@ -44,6 +46,7 @@
     "marked": "^4.0.16",
     "mongodb": "^4.6.0",
     "node-emoji": "^1.11.0",
+    "remove-markdown": "^0.5.0",
     "winston": "^3.7.2"
   }
 }

@@ -1,4 +1,3 @@
-import bionify from "$lib/bionic/translator";
 import Post from "$lib/models/post";
 import FloraicResponses from "$lib/responses/basic";
 import type { RequestEvent } from "@sveltejs/kit";
@@ -38,17 +37,13 @@ export async function post(event: RequestEvent) {
             const softClone: any = {};
 
             Object.entries(body)
-                .filter(entry => SUPPORTED_ELEMENTS.includes(entry[0]) && entry[1] instanceof String)
+                .filter(entry => SUPPORTED_ELEMENTS.includes(entry[0]) && typeof entry[1] === 'string')
                 .forEach(entry => softClone[entry[0]] = entry[1]);
 
             if (Object.keys(softClone).length <= 0) return FloraicResponses.INVALID_REQUEST;
 
             if (!(softClone.image.startsWith('https://') || softClone.image.startsWith('http://')))
                 return FloraicResponses.INVALID_REQUEST;
-
-            if (softClone.content) {
-                softClone['bionic'] = bionify(softClone.content);
-            }
 
             await post.update(softClone)
             
@@ -75,6 +70,9 @@ export async function del(event: RequestEvent) {
         if (!post) return FloraicResponses.INVALID_RESOURCE;
 
         await post.delete()
+        return {
+            status: 204
+        }
     } catch (err: any) {
         console.error(err);
         return FloraicResponses.INTERNAL_ERROR;

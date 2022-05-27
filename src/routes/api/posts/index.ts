@@ -1,27 +1,22 @@
 import Post from "$lib/models/post";
 import FloraicResponses from "$lib/responses/basic";
-import { paginate } from "$lib/responses/paginator";
 import type { RequestEvent } from "@sveltejs/kit";
-import { ObjectId } from "mongodb";
 
 const POSTS_PER_REQUEST = 10;
 const SORTING_ORDER = 'latest'
 
 export async function get(event: RequestEvent) {
-    if (event.url.searchParams.get('after') && ObjectId.isValid(event.url.searchParams.get('after')!)) {
-        return {
-            body: await paginate(Post.after(new ObjectId(event.url.searchParams.get('after')!), POSTS_PER_REQUEST, SORTING_ORDER))
-        }
-    }
 
-    if (event.url.searchParams.get('before') && ObjectId.isValid(event.url.searchParams.get('before')!)) {
+    // searching for titles is available but not enabled on front-end atm.
+    // it's planned to have though, so please keep this till then.
+    if (event.url.searchParams.get('title')) {
         return {
-            body: await paginate(Post.after(new ObjectId(event.url.searchParams.get('before')!), POSTS_PER_REQUEST, SORTING_ORDER))
+            body: await Post.search(event.url.searchParams.get('title')!).then(result => result.map(post => post.without("content")))
         }
     }
 
     return {
-        body: await paginate(Post.all(POSTS_PER_REQUEST, SORTING_ORDER))
+        body: await Post.all().then(result => result.map(post => post.without("content")))
     }
 }
 const SUPPORTED_ELEMENTS = [
@@ -37,8 +32,9 @@ export async function put(event: RequestEvent) {
         const body = await event.request.json();
 
         try {
-            if (!(body.title && body.image && body.content) || !(body.title instanceof String && body.image instanceof String && body.content instanceof String)) 
+            if (!(body.title && body.image && body.content) || !(typeof body.title === "string" && typeof body.image === "string" && typeof body.content === 'string'))  {
                 return FloraicResponses.INVALID_REQUEST;
+            }
 
             if (!(body.image.startsWith('https://') || body.image.startsWith('http://')))
                 return FloraicResponses.INVALID_REQUEST;

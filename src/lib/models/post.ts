@@ -8,14 +8,20 @@ export default class Post implements FloraModel {
     image: string | null;
     title: string;
     content: string;
-    bionic: string;
 
     constructor(_id: string, title: string, image: string | null, content: string) {
         this._id = _id;
         this.image = image;
         this.title = title;
         this.content = content;
-        this.bionic = bionify(content);
+    }
+
+    private static collection() {
+        return mongo.getClient().then(client => {
+            client!.db('flora').collection('posts').createIndex({ title: 'text' });
+
+            return client!.db('flora').collection('posts')
+        })
     }
 
     /**
@@ -47,7 +53,7 @@ export default class Post implements FloraModel {
      * @returns The result from updating this post.
      */
     public async update($set: any) {
-        return mongo.getClient().then(client => client!.db('flora').collection('posts').updateOne({
+        return Post.collection().then(collection => collection.updateOne({
             _id: new ObjectId(this._id)
         }, {
             $set: $set
@@ -86,20 +92,21 @@ export default class Post implements FloraModel {
      * 
      * @returns All the posts available in the database.
      */
-    public static async all(limit: number, sort: 'latest' | 'oldest'): Promise<Post[]> {
-        return mongo.getClient().then(client => client!.db('flora').collection('posts').find()
+    public static async all(): Promise<Post[]> {
+        return Post.collection().then(collection => collection.find()
             .map(result => new Post(result._id.toString(), result.title, result.image, result.content))
-            .limit(limit)
-            .sort(
-                sort === 'latest'
-                ? {
-                    _id: -1
-                }
-                : {
-                    _id: 1
-                }
-            )
             .toArray())
+    }
+
+    public static async search(title: string): Promise<Post[]> {
+        return Post.collection().then(collection => collection.find({
+            $text: {
+                $search: title,
+                $caseSensitive: false
+            }
+        })
+        .map(result => new Post(result._id.toString(), result.title, result.image, result.content))
+        .toArray())
     }
 
     /**
@@ -108,7 +115,7 @@ export default class Post implements FloraModel {
      * @returns All the posts available in the database after the given post.
      */
     public static async after(post: ObjectId, limit: number, sort: 'latest' | 'oldest'): Promise<Post[]> {
-        return mongo.getClient().then(client => client!.db('flora').collection('posts').find({
+        return Post.collection().then(collection => collection.find({
             _id: {
                 $lt: post
             }
@@ -133,7 +140,7 @@ export default class Post implements FloraModel {
      * @returns All the posts available in the database before the given post.
     */
     public static async before(post: ObjectId, limit: number, sort: 'latest' | 'oldest'): Promise<Post[]> {
-            return mongo.getClient().then(client => client!.db('flora').collection('posts').find({
+            return Post.collection().then(collection => collection.find({
                 _id: {
                     $gt: post
                 }
@@ -150,7 +157,7 @@ export default class Post implements FloraModel {
                 }
             )
             .toArray())
-        }
+    }
 
     /**
      * Finds one post that matches the identifier given.
@@ -159,7 +166,7 @@ export default class Post implements FloraModel {
      * @returns A {@link Post} object with the data from the database.
      */
     public static async withId(id: string): Promise<Post | null> {
-        return mongo.getClient().then(client => client!.db('flora').collection('posts').findOne({
+        return Post.collection().then(collection => collection.findOne({
             _id: new ObjectId(id)
         })).then(result => {
             if (result) {
@@ -179,9 +186,9 @@ export default class Post implements FloraModel {
      * @returns A simple {@link Post} object.
      */
     public static async create(title: string, image: string | null, content: string): Promise<Post> {
-        const post = new Post('', title, null, content)
+        const post = new Post('', title, image, content)
 
-        return mongo.getClient().then(client => client!.db('flora').collection('posts').insertOne(post.without('_id'))).then(result => {
+        return Post.collection().then(collection => collection.insertOne(post.without('_id'))).then(result => {
             post._id = result.insertedId.toString();
             return post;
          })

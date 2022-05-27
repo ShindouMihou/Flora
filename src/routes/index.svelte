@@ -1,23 +1,21 @@
 <script lang="ts">
-import ErrorBlock from '$lib/components/ErrorBlock.svelte';
+    import ErrorBlock from '$lib/components/ErrorBlock.svelte';
 
     import PostDisplay from '$lib/components/PostDisplay.svelte';
-import PostDisplayLoading from '$lib/components/PostDisplayLoading.svelte';
-import PostDisplayNone from '$lib/components/PostDisplayNone.svelte';
+    import PostDisplayLoading from '$lib/components/PostDisplayLoading.svelte';
+    import PostDisplayNone from '$lib/components/PostDisplayNone.svelte';
     import type Post from '$lib/models/post';
-    import type { PaginateResult, Paginator } from '$lib/responses/paginator';
     import axios from "axios";
     import { onMount } from 'svelte';
 
     let errors: string[] = [];
     let posts: Post[] | null = null;
-    let paginator: Paginator | null = null;
 
     onMount(() => {
         axios.get('/api/posts').then(result => {
-            const paginated: PaginateResult<Post> = result.data;
+            const results: Post[] = result.data;
 
-            posts = paginated.data.map(post => {
+            posts = results.map(post => {
                 post.image = post.image ?? "default.png";
                 
                 if (post.title.length > 256) {
@@ -26,8 +24,6 @@ import PostDisplayNone from '$lib/components/PostDisplayNone.svelte';
 
                 return post;
             })
-
-            paginator = paginated.paginator;
         }).catch(error => {
             if (error.response) {
                 errors.push("Failed to request post information, received " + error.response.status + " with content " + error.response.data.error + "");
@@ -42,6 +38,14 @@ import PostDisplayNone from '$lib/components/PostDisplayNone.svelte';
         })
     });
 </script>
+
+<svelte:head>
+    <meta name="title" content="{import.meta.env.VITE_SEO_TITLE}"/>
+    <meta name="image" content="{import.meta.env.VITE_SEO_IMAGE}"/>
+    <meta name="og:image" content="{import.meta.env.VITE_SEO_IMAGE}"/>
+    <meta name="description" content="{import.meta.env.VITE_SEO_DESCRIPTION}"/>
+    <meta name="og:type" content="website"/>
+</svelte:head>
 
 {#if errors.length > 0}
     {#each errors as error}

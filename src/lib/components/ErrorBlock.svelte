@@ -5,7 +5,7 @@
     
 </script>
 
-<div id="made-with-flora" class="flex flex-row justify-between items-center w-full bg-red-200 p-2 mb-4 text-black rounded-sm">
+<div id="error-block" class="flex flex-row justify-between items-center w-full bg-red-200 p-2 mb-4 text-black rounded-sm">
     <div class="flex flex-row gap-2 items-center">
       <Icon src={Annotation} solid class="text-red-500 w-[1.10rem] flex-shrink-0"></Icon>
       <p class="text-xs">{message}</p>

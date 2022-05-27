@@ -31,7 +31,7 @@ const SUPPORTED_ELEMENTS = [
 ]
 
 export async function put(event: RequestEvent) {
-    if (!event.locals.authenticated) return FloraicResponses.UNAUTHENTICATED;
+    if (!event.locals.authenticated) return FloraicResponses.UNAUTHORIZED;
 
     try {
         const body = await event.request.json();

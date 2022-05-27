@@ -1,3 +1,4 @@
+import bionify from "$lib/bionic/translator";
 import mongo from "$lib/mongo";
 import { ObjectId } from "mongodb";
 import type FloraModel from "./plain";
@@ -7,12 +8,14 @@ export default class Post implements FloraModel {
     image: string | null;
     title: string;
     content: string;
+    bionic: string;
 
     constructor(_id: string, title: string, image: string | null, content: string) {
         this._id = _id;
         this.image = image;
         this.title = title;
         this.content = content;
+        this.bionic = bionify(content);
     }
 
     /**

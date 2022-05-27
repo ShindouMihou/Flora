@@ -1,5 +1,5 @@
 export default class FloraicResponses {
-    public static UNAUTHENTICATED: any = {
+    public static UNAUTHORIZED: any = {
         body: {
             error: "You cannot perform this action."
         },

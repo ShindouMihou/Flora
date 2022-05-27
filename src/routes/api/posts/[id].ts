@@ -1,3 +1,4 @@
+import bionify from "$lib/bionic/translator";
 import Post from "$lib/models/post";
 import FloraicResponses from "$lib/responses/basic";
 import type { RequestEvent } from "@sveltejs/kit";
@@ -10,7 +11,7 @@ export async function get(event: RequestEvent) {
     const post = await Post.withId(event.params.id)
 
     if (!post) return FloraicResponses.INVALID_RESOURCE;
-    
+
     return {
         body: post
     }
@@ -23,7 +24,7 @@ const SUPPORTED_ELEMENTS = [
 ]
 
 export async function post(event: RequestEvent) {
-    if (!event.locals.authenticated) return FloraicResponses.UNAUTHENTICATED;
+    if (!event.locals.authenticated) return FloraicResponses.UNAUTHORIZED;
     if (!ObjectId.isValid(event.params.id)) return FloraicResponses.INVALID_RESOURCE_PARAMTERS;
 
     const post = await Post.withId(event.params.id)
@@ -45,6 +46,10 @@ export async function post(event: RequestEvent) {
             if (!(softClone.image.startsWith('https://') || softClone.image.startsWith('http://')))
                 return FloraicResponses.INVALID_REQUEST;
 
+            if (softClone.content) {
+                softClone['bionic'] = bionify(softClone.content);
+            }
+
             await post.update(softClone)
             
             return {
@@ -63,7 +68,7 @@ export async function post(event: RequestEvent) {
 export async function del(event: RequestEvent) {
     try {
 
-        if (!event.locals.authenticated) return FloraicResponses.UNAUTHENTICATED;
+        if (!event.locals.authenticated) return FloraicResponses.UNAUTHORIZED;
         if (!ObjectId.isValid(event.params.id)) return FloraicResponses.INVALID_RESOURCE_PARAMTERS;
 
         const post = await Post.withId(event.params.id)

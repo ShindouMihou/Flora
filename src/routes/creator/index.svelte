@@ -63,6 +63,10 @@
     });
 </script>
 
+<svelte:head>
+    <title>Creator Dashboard | Flora</title>
+</svelte:head>
+
 {#if errors.length > 0}
     {#each errors as error}
     <ErrorBlock message="{error}"></ErrorBlock>

@@ -263,6 +263,7 @@
 </script>
 
 <svelte:head>
+    <title>{title || "Floraic Editor | Flora"}</title>
     <link
         rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/styles/atom-one-dark.min.css"

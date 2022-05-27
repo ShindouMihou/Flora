@@ -40,6 +40,7 @@
 </script>
 
 <svelte:head>
+    <title>{import.meta.env.VITE_SEO_TITLE}</title>
     <meta name="title" content="{import.meta.env.VITE_SEO_TITLE}"/>
     <meta name="image" content="{import.meta.env.VITE_SEO_IMAGE}"/>
     <meta name="og:image" content="{import.meta.env.VITE_SEO_IMAGE}"/>

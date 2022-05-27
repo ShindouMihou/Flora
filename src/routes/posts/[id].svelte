@@ -49,6 +49,7 @@
 </script>
 
 <svelte:head>
+    <title>{title}</title>
     <meta name="title" content={title} />
     <meta name="image" content={image} />
     <meta name="og:image" content={image} />

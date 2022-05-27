@@ -14,7 +14,6 @@
 <script>
 import FloraEditor from "$lib/components/editor/FloraEditor.svelte";
 import { page } from "$app/stores";
-
 </script>
 
 

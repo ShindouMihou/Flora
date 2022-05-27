@@ -58,21 +58,21 @@
                     console.log(error);
                 });
 
-            document.onkeyup = (event) => {
+            document.addEventListener("keydown", (event) => {
                 if (event.ctrlKey && event.key === "s") {
                     event.preventDefault();
                     save();
                 }
-            };
+            });
             return;
         }
 
-        document.onkeyup = (event) => {
+        document.addEventListener("keydown", (event) => {
             if (event.ctrlKey && event.key === "s") {
                 event.preventDefault();
                 save();
             }
-        };
+        });
     });
 
     // This is a lock to prevent saving too much.
@@ -257,7 +257,10 @@
 </script>
 
 <svelte:head>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/styles/atom-one-dark.min.css">
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/styles/atom-one-dark.min.css"
+    />
 </svelte:head>
 
 {#if errors.length > 0}
@@ -437,17 +440,19 @@
                     class="{markdownClass} text-2xl min-h-screen resize-none py-2 mkdown open-sans"
                     id="markdown"
                 >
-                {@html marked(emojis(content), {
-                    smartypants: true,
-                    gfm: true,
-                    highlight: (code, lang) => {
-                        if (lang == '') {
-                            return hljs.highlightAuto(code).value;
-                        }
-        
-                        return hljs.highlight(lang, code).value;
-                    }
-                })}
+                    {@html marked(emojis(content), {
+                        smartypants: true,
+                        gfm: true,
+                        highlight: (code, lang) => {
+                            if (lang == "") {
+                                return hljs.highlightAuto(code).value;
+                            }
+
+                            return hljs.highlight(code, {
+                                language: lang,
+                            }).value;
+                        },
+                    })}
                 </div>
                 <textarea
                     class="text-neutral-50 bg-neutral-900 outline-none text-base placeholder:text-neutral-600 min-h-screen resize-none selection:text-black selection:bg-white {textEditorClass}"

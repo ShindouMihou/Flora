@@ -99,7 +99,9 @@
                         return hljs.highlightAuto(code).value;
                     }
 
-                    return hljs.highlight(lang, code).value;
+                    return hljs.highlight(code, {
+                        language: lang
+                    }).value;
                 },
             })}
         </div>

@@ -42,6 +42,9 @@ export async function post(event: RequestEvent) {
 
             if (Object.keys(softClone).length <= 0) return FloraicResponses.INVALID_REQUEST;
 
+            if (!(softClone.image.startsWith('https://') || softClone.image.startsWith('http://')))
+                return FloraicResponses.INVALID_REQUEST;
+
             await post.update(softClone)
             
             return {

@@ -1,7 +1,7 @@
-# Flora
+# 💮 Flora
 A simple, markdown-based blog platform written completely in Typescript, Sveltekit and Tailwind. Unlike other platforms, Flora aims to be simple and minimal but still being beautiful with the help of tools like Bionic Reading to enable superior reading speeds.
 
-## Installation
+## 📦 Installation
 You can setup your own instance of Flora by following the steps below:
 
 Clone the repository:
@@ -42,12 +42,12 @@ docker run -d -i -t -p 3000:3000 --env-file .env --name flora flora:latest
 
 Flora should now be running at `https://localhost:3000` (to change the port, change the value of `-p`: `-p <machine port>:3000`).
 
-## Creator Dashboard
+## 📖 Creator Dashboard
 You can access Flora's creator dashboard which is located on `/creator/`. You'll be redirected to the login page (`/creator/login`) if you are not logged in. After that, you can create new articles, delete, update and whatever you like. Although Flora won't host any images whatsoever which means you need to upload the images somewhere.
 
 If you want to log-out of the creator account then you can head to `/creator/logout` which should log you out of the creator account.
 
-## SEO
+## 🖼️ SEO
 Flora supports a minimal amount of SEO which is configured on `.env` file, those SEO properties will be reflected on all pages except for the creator pages and also the articles themselves (which have their own SEO based on the content). 
 
 Articles uses the following SEO properties:
@@ -56,7 +56,7 @@ Articles uses the following SEO properties:
 - `content`: The first 165-characters content written.
 - `article:author`: The value configured in `VITE_DISPLAY_NAME` in `.env` file.
 
-## State of Flora
+## 🚡 State of Flora
 Flora is far from reaching stable release and at the moment is on development versions with the following features and functionalities implemented or missing:
 - [x] Home (`/`) and Post (`/posts/:id`) pages.
 - [x] HTTP API for getting posts and creating posts.
@@ -64,6 +64,22 @@ Flora is far from reaching stable release and at the moment is on development ve
 - [x] Bionic reading (not the best implementation but not the worst).
 - [ ] Transpiler for .md files to .svelte files to enable static generated sites.
 - [x] Editor (`/editor/:id`) and Creator Dashboard (`/creator/`)
+  
+<details>
+  <summary>Previews</summary>
+  
+Creator Dashboard
+![image](https://user-images.githubusercontent.com/69381903/170739685-985a89fd-6f9f-4fd7-9796-8a51a697c5b1.png)
+  
+Editor
+![image](https://user-images.githubusercontent.com/69381903/170739826-218f9b49-8159-4817-b13e-f416c767ad07.png)
+ 
+Homepage
+![image](https://user-images.githubusercontent.com/69381903/170739901-57ccd511-9b8b-4555-b571-faf7f09444c8.png)
 
-## Show Flora some love!
+Article Page
+![image](https://user-images.githubusercontent.com/69381903/170739943-04572b03-ea2a-4b17-92f5-0847121f7381.png)
+</details>
+
+## 💌 Show Flora some love!
 If you like and is using Flora then feel free to show the project some love by adding a star to the repository or by enabling `VITE_FLORA_BANNER` in your configuration which will show the `made with FLORA` banner at the top of your page (will not be shown again if the user opts to hide it).

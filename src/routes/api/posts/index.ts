@@ -40,6 +40,9 @@ export async function put(event: RequestEvent) {
             if (!(body.title && body.image && body.content) || !(body.title instanceof String && body.image instanceof String && body.content instanceof String)) 
                 return FloraicResponses.INVALID_REQUEST;
 
+            if (!(body.image.startsWith('https://') || body.image.startsWith('http://')))
+                return FloraicResponses.INVALID_REQUEST;
+
             const post = await Post.create(body.title, body.image, body.content)
             
             return {

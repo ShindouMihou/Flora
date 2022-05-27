@@ -46,6 +46,7 @@
 </script>
 
 <svelte:head>
+  <meta name="theme-color" content="{ import.meta.env.VITE_SEO_COLOR }"/>
   <link rel="icon" href="{ import.meta.env.VITE_FAVICON }" />
 </svelte:head>
 

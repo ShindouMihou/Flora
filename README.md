@@ -24,7 +24,7 @@ cp .env.example .env && nano .env
 Install MongoDB with Docker (optional if you have one already):
 ```shell
 docker volume create flora_db
-docker run --name flora_db --restart=always -e MONGO_INITDB_ROOT_USERNAME=<SECRET DATABASE USERNAME> -e MONGO_INITDB_ROOT_PASSWORD=<SECRET DATABASE PASSWORD> -v flora_db:/data/db mongo
+docker run -d -i -t --name flora_db --restart=always -e MONGO_INITDB_ROOT_USERNAME=<SECRET DATABASE USERNAME> -e MONGO_INITDB_ROOT_PASSWORD=<SECRET DATABASE PASSWORD> -v flora_db:/data/db mongo
 ```
 
 After installing MongoDB, you need to configure the MONGO_URI in `.env`:

@@ -1,15 +1,17 @@
 FROM node:17-alpine
-WORKDIR /usr/src/app
 
-# Copy all the package.json first.
+WORKDIR /app
 COPY . .
-
-# Install all the dependencies
 RUN npm ci
-
-# Build the production image.
 RUN npm run build
 
-EXPOSE 3000
 
-CMD [ "node", "./build/index.js" ]
+FROM node:17-alpine
+
+WORKDIR /app
+COPY --from=0 /app/package*.json ./
+RUN npm ci --production --ignore-scripts
+COPY --from=0 /app/build ./
+
+EXPOSE 3000
+CMD ["node", "./index.js"]

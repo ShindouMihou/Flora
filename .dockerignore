@@ -1,0 +1,8 @@
+node_modules/
+build/
+.env
+.env.example
+.github/
+README.md
+LICENSE
+.gitignore

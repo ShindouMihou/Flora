@@ -175,7 +175,7 @@ export default class Post implements FloraModel {
      * @param content The content of the post to create.
      * @returns A simple {@link Post} object.
      */
-    public static async create(title: string, content: string): Promise<Post> {
+    public static async create(title: string, image: string | null, content: string): Promise<Post> {
         const post = new Post('', title, null, content)
 
         return mongo.getClient().then(client => client!.db('flora').collection('posts').insertOne(post.without('_id'))).then(result => {

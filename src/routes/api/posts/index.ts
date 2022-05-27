@@ -26,7 +26,8 @@ export async function get(event: RequestEvent) {
 }
 const SUPPORTED_ELEMENTS = [
     "title",
-    "content"
+    "content",
+    "image"
 ]
 
 export async function put(event: RequestEvent) {
@@ -36,15 +37,10 @@ export async function put(event: RequestEvent) {
         const body = await event.request.json();
 
         try {
-            const softClone: any = {};
+            if (!(body.title && body.image && body.content) || !(body.title instanceof String && body.image instanceof String && body.content instanceof String)) 
+                return FloraicResponses.INVALID_REQUEST;
 
-            Object.entries(body)
-                .filter(entry => SUPPORTED_ELEMENTS.includes(entry[0]) && entry[1] instanceof String)
-                .forEach(entry => softClone[entry[0]] = entry[1]);
-
-            if (Object.keys(softClone).length <= 0) return FloraicResponses.INVALID_REQUEST;
-
-            const post = await Post.create(softClone.title, softClone.content)
+            const post = await Post.create(body.title, body.image, body.content)
             
             return {
                 body: post,

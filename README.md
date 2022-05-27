@@ -7,6 +7,10 @@ A simple, markdown-based blog platform written completely in Typescript, Sveltek
 ### 📦 Installation
 You can setup your own instance of Flora by following the steps below:
 
+> **Warning**
+>
+> Due to the nature of Vite, it is recommended to **CONFIGURE** the `.env` file first before building the Docker image!!! You should always re-build the docker image as well when changing a `VITE_` prefixed configuration in `.env` file since Vite replaces them in the code in build time.
+
 Clone the repository:
 ```shell
 git clone https://github.com/ShindouMihou/Flora && cd Flora

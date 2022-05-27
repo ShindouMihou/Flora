@@ -7,8 +7,9 @@
     import { page } from "$app/stores";
     import axios from "axios";
     import ErrorBlock from "$lib/components/ErrorBlock.svelte";
-import type Post from "$lib/models/post";
-
+    import type Post from "$lib/models/post";
+    import DOMPurify from 'dompurify';
+    
     let title = "";
     let image = "";
     let content = "";
@@ -62,7 +63,7 @@ import type Post from "$lib/models/post";
         <p id="postAuthor" class="text-lg font-semibold monst text-gray-500">by { import.meta.env.VITE_DISPLAY_NAME }</p>
     </div>    
     <div class="mkdown flex flex-col gap-4">
-        {@html marked(emojis(content), {
+        {@html DOMPurify.sanitize(marked(emojis(content), {
             smartypants: true,
             gfm: true,
             highlight: (code, lang) => {
@@ -72,7 +73,7 @@ import type Post from "$lib/models/post";
 
                 return hljs.highlight(lang, code).value;
             }
-        })}
+        }))}
     </div>
     {:else}
     <PostLoading></PostLoading>

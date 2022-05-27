@@ -46,12 +46,6 @@
     localStorage.setItem('bionic', document.getElementById('bionic').checked)
     localStorage.setItem('theme', document.getElementById('dark-mode').checked ? 'dark' : 'light')
 
-    if (darkMode) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-
     setTimeout(() => window.location.reload(), 500)
   }
 </script>

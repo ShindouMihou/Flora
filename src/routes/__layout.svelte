@@ -46,7 +46,7 @@
     localStorage.setItem('bionic', document.getElementById('bionic').checked)
     localStorage.setItem('theme', document.getElementById('dark-mode').checked ? 'dark' : 'light')
 
-    setTimeout(() => window.location.reload(), 500)
+    setTimeout(() => window.location.reload(), 100)
   }
 </script>
 

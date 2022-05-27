@@ -19,7 +19,7 @@ import type Post from "$lib/models/post";
             const post: Post = result.data;
 
             title = post.title;
-            image = import.meta.env.VITE_SILVA_FILE_HOST + "/" + (post.image ?? "default.png");
+            image = post.image ?? "default.png";
             content = post.content;
         }).catch(error => {
             if (error.response) {

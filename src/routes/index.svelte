@@ -18,7 +18,7 @@ import PostDisplayNone from '$lib/components/PostDisplayNone.svelte';
             const paginated: PaginateResult<Post> = result.data;
 
             posts = paginated.data.map(post => {
-                post.image = import.meta.env.VITE_SILVA_FILE_HOST + "/" + (post.image ?? "default.png");
+                post.image = post.image ?? "default.png";
                 
                 if (post.title.length > 256) {
                     post.title = post.title.substring(0, 256);

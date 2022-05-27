@@ -25,11 +25,11 @@
     }
 
     .mkdown pre {
-        @apply bg-black rounded-md p-2 my-4 whitespace-pre-wrap break-all text-white;
+        @apply bg-black dark:bg-neutral-900 dark:border dark:border-white rounded-md p-3 my-4 whitespace-pre-wrap break-all text-white;
     }
 
     .mkdown code {
-        @apply bg-black rounded-md p-1 whitespace-pre-wrap break-all;
+        @apply bg-black dark:bg-neutral-900 rounded-md p-1 whitespace-pre-wrap break-all;
     }
 
     .mkdown p {

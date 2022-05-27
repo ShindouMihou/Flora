@@ -345,14 +345,14 @@
             <input
                 type="text"
                 disabled={lock}
-                class="outline-none opensans border p-4 duration-[250ms] w-full focus:bg-black focus:text-white"
+                class="outline-none opensans border p-4 duration-[250ms] w-full dark:bg-black dark:focus:bg-white dark:focus:text-black focus:bg-black focus:text-white"
                 placeholder="Post Title"
                 bind:value={title}
             />
             <input
                 type="text"
                 disabled={lock}
-                class="outline-none opensans border p-4 duration-[250ms] w-full focus:bg-black focus:text-white"
+                class="outline-none opensans border p-4 duration-[250ms] w-full dark:bg-black dark:focus:bg-white dark:focus:text-black focus:bg-black focus:text-white"
                 placeholder="Post Image"
                 bind:value={image}
             />
@@ -372,7 +372,7 @@
             class="min-h-screen bg-neutral-900 text-white opensans {editorClass}"
             id="editor"
         >
-            <div class="bg-white p-4 rounded shadow shadow-black">
+            <div class="bg-white dark:bg-black dark:shadow-none dark:border dark:border-white p-4 rounded shadow shadow-black">
                 <div class="flex flex-row justify-between gap-4">
                     <div
                         class="flex flex-row justify-between w-full text-neutral-500 align-middle items-center"

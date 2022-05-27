@@ -68,8 +68,8 @@
         <p class="text-lg opensans">In a land full of chaos, a kingdom must place a gate to prevent the chaos from entering.</p>
     </div>
     <div class="flex flex-col gap-2">
-        <input type="text" class="outline-none opensans border p-4 duration-[250ms] focus:bg-black focus:text-white" placeholder="Administrator Name" bind:value={name}/>
-        <input type="password" class="outline-none opensans border p-4 duration-[250ms] focus:bg-black focus:text-white" placeholder="Secret Key" bind:value={password}/>
-        <button class="bg-black text-white p-4 mt-2 md:max-w-[10rem]" on:click={login}>Login</button>
+        <input type="text" class="outline-none opensans border p-4 duration-[250ms] dark:bg-black dark:focus:bg-white dark:focus:text-black focus:bg-black focus:text-white" placeholder="Administrator Name" bind:value={name}/>
+        <input type="password" class="outline-none opensans border p-4 duration-[250ms] dark:bg-black dark:focus:bg-white dark:focus:text-black focus:bg-black focus:text-white" placeholder="Secret Key" bind:value={password}/>
+        <button class="bg-black text-white dark:bg-white dark:text-black p-4 mt-2 md:max-w-[10rem]" on:click={login}>Login</button>
     </div>
 </div>

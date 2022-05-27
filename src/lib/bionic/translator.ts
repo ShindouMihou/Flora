@@ -20,7 +20,10 @@ export default function bionify(text: string): string {
             state = "bold";
         }
 
-        if (content.startsWith("```")) {
+
+        if (content.startsWith("```") && state === 'codespace') {
+            state = "plain"
+        } else {
             state = "codespace"
         }
 

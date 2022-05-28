@@ -125,7 +125,7 @@
     {/each}
 {/if}
 {#if showBackToTop}
-    <button class="fixed bottom-5 md:bottom-10 right-5 md:right-16" on:click={backToTop} transition:fade>
+    <button class="fixed bottom-5 md:bottom-10 right-5 md:right-16 print:hidden" on:click={backToTop} transition:fade>
         <div class="p-3 bg-neutral-300 opacity-50 rounded-lg border border-transparent hover:border-blue-500 duration-[250ms]">
             <Icon src={ArrowUp} class="h-8 w-8 flex-shrink-0" solid />
         </div>

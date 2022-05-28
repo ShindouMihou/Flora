@@ -55,7 +55,7 @@
 
 <div id="container" class="py-6 px-6 md:px-44 flex flex-col w-full m-auto max-w-[2168px] bg-white dark:bg-black dark:text-white">
   {#if bannerVisibility === 'true'}
-  <div id="made-with-flora" class="flex flex-row justify-between items-center w-full bg-blue-200 p-2 mb-4 text-black rounded-sm">
+  <div id="made-with-flora" class="flex flex-row justify-between items-center w-full bg-blue-200 p-2 mb-4 text-black rounded-sm print:hidden">
     <a class="flex flex-row gap-1 items-center" href="https://github.com/ShindouMihou/Flora" rel="external" target="_blank">
       <Icon src={Heart} solid class="text-red-500 w-[1.10rem] flex-shrink-0"></Icon>
       <p class="text-xs">made with <span class="uppercase font-bold">Flora</span></p>
@@ -65,7 +65,7 @@
     </button>
   </div>
   {/if}
-  <nav id="navigator" class="flex flex-col gap-2">
+  <nav id="navigator" class="flex flex-col gap-2 print:hidden">
     <div class="flex flex-row gap-2 justify-between items-center">
       <div class="flex flex-row gap-2 flex-grow">
         <a href="/">
@@ -84,7 +84,7 @@
       </button>
     </div>
   </nav>
-  <div class="flex flex-col gap-2 border rounded-lg p-2 w-full {settings}">
+  <div class="flex flex-col gap-2 border rounded-lg p-2 w-full {settings} print:hidden">
     <div class="flex flex-row justify-between">
       <h3 class="font-bold uppercase monst">Settings</h3>
       <button on:click={toggleSettings}>

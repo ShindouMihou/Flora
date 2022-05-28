@@ -16,7 +16,12 @@ export async function get(event: RequestEvent) {
     }
 
     return {
-        body: await Post.all().then(result => result.map(post => post.without("content")))
+        body: await Post.all().then(result => result.map(post => {
+            return {
+                ...post.without("content"),
+                timestamp: post.timestamp()
+            }
+        }))
     }
 }
 const SUPPORTED_ELEMENTS = [

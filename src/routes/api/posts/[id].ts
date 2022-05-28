@@ -12,7 +12,10 @@ export async function get(event: RequestEvent) {
     if (!post) return FloraicResponses.INVALID_RESOURCE;
 
     return {
-        body: post
+        body: {
+            ...post,
+            timestamp: post.timestamp()
+        }
     }
 }
 

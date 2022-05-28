@@ -15,6 +15,10 @@ export default class Post implements FloraModel {
         this.content = content;
     }
 
+    public timestamp() {
+        return new ObjectId(this._id).getTimestamp()
+    }
+
     private static collection() {
         return mongo.getClient().then(client => {
             client!.db('flora').collection('posts').createIndex({ title: 'text' });

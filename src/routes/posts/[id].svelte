@@ -11,6 +11,7 @@
                         title: response.title,
                         image: response.image,
                         content: response.content,
+                        timestamp: new Date(response.timestamp)
                     },
                 };
             } else {
@@ -40,6 +41,7 @@
     export let title: string;
     export let image: string;
     export let content: string;
+    export let timestamp: Date;
 
     let errors: string[] = [];
     let metaDescription: string = removeMarkdown(content);
@@ -55,6 +57,7 @@
     <meta name="og:image" content={image} />
     <meta name="description" content={metaDescription} />
     <meta name="og:type" content="article" />
+    <meta name="article:published_time" content={timestamp.toISOString()} />
     <meta name="article:author" content={import.meta.env.VITE_DISPLAY_NAME} />
     <link
         rel="stylesheet"
@@ -78,9 +81,11 @@
             <h1 id="postTitle" class="text-4xl font-bold monst">{title}</h1>
             <p
                 id="postAuthor"
-                class="text-lg font-semibold monst text-gray-500"
+                class="text-md font-semibold monst text-gray-500"
             >
-                by {import.meta.env.VITE_DISPLAY_NAME}
+                {import.meta.env.VITE_DISPLAY_NAME} • {timestamp.toLocaleDateString('en-US', {
+                    dateStyle: 'medium'
+                })}
             </p>
         </div>
         <div class="mkdown flex flex-col gap-1 opensans">

@@ -55,7 +55,7 @@
     import ErrorBlock from "$lib/components/ErrorBlock.svelte";
     import removeMarkdown from "remove-markdown";
     import { fade } from "svelte/transition";
-    import { ArrowUp, ChevronUp, Icon } from "svelte-hero-icons";
+    import { ArrowUp, Icon } from "svelte-hero-icons";
     import { onMount } from "svelte";
 
     export let title: string;
@@ -67,7 +67,15 @@
     let metaDescription: string = removeMarkdown(content);
 
     let showBackToTop = false;
-    const BACK_TO_TOP_FEATURE = import.meta.env.VITE_BACK_TO_TOP == null ? true : import.meta.env.VITE_BACK_TO_TOP === 'true';
+
+    const BACK_TO_TOP_FEATURE = import.meta.env.VITE_BACK_TO_TOP == null 
+        ? true 
+        : import.meta.env.VITE_BACK_TO_TOP === 'true';
+
+    const DISALLOW_SELECT_CODEBLOCKS = import.meta.env.VITE_DISALLOW_SELECT_CODEBLOCKS == null 
+        ? false 
+        : import.meta.env.VITE_DISALLOW_SELECT_CODEBLOCKS === 'true';
+
 
     if (metaDescription.length > 162)
         metaDescription = metaDescription.slice(0, 162) + "...";
@@ -100,6 +108,15 @@
         rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/styles/atom-one-dark.min.css"
     />
+    {#if DISALLOW_SELECT_CODEBLOCKS}
+    <style>
+        .mkdown pre {
+            user-select: none;
+            -web-kit-user-select: none;
+            -ms-user-select: none;
+        }
+    </style>
+    {/if}
 </svelte:head>
 
 {#if errors.length > 0}

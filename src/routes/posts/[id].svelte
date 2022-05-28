@@ -3,7 +3,9 @@
 
     export const load: Load = async ({ params, fetch }) => {
         try {
-            const response = await fetch(`/api/posts/${params.id}`).then(result => result.json());
+            const response = await fetch(`/api/posts/${params.id}`).then(
+                (result) => result.json()
+            );
 
             if (!response.error) {
                 return {
@@ -11,20 +13,35 @@
                         title: response.title,
                         image: response.image,
                         content: response.content,
-                        timestamp: new Date(response.timestamp)
+                        timestamp: new Date(response.timestamp),
                     },
                 };
             } else {
+                const searchResults = await fetch(
+                    `/api/posts/?title=${params.id}&limit=1`
+                ).then((result) => result.json());
+
+                const firstResult = searchResults[0];
+                if (!firstResult) {
+                    return {
+                        status: 404,
+                    };
+                }
+
                 return {
-                    status: 302,
-                    redirect: "/",
+                    props: {
+                        title: firstResult.title,
+                        image: firstResult.image,
+                        content: firstResult.content,
+                        timestamp: new Date(firstResult.timestamp),
+                    },
                 };
             }
         } catch (err: any) {
             console.error(err);
             return {
-                status: 302,
-                redirect: "/",
+                status: 500,
+                error: err
             };
         }
     };
@@ -83,9 +100,12 @@
                 id="postAuthor"
                 class="text-md font-semibold monst text-gray-500"
             >
-                {import.meta.env.VITE_DISPLAY_NAME} • {timestamp.toLocaleDateString('en-US', {
-                    dateStyle: 'medium'
-                })}
+                {import.meta.env.VITE_DISPLAY_NAME} • {timestamp.toLocaleDateString(
+                    "en-US",
+                    {
+                        dateStyle: "medium",
+                    }
+                )}
             </p>
         </div>
         <div class="mkdown flex flex-col gap-1 opensans">
@@ -98,7 +118,7 @@
                     }
 
                     return hljs.highlight(code, {
-                        language: lang
+                        language: lang,
                     }).value;
                 },
             })}

@@ -102,16 +102,23 @@ export default class Post implements FloraModel {
             .toArray())
     }
 
-    public static async search(title: string): Promise<Post[]> {
-        return Post.collection().then(collection => collection.find({
-            $text: {
-                $search: title,
-                $caseSensitive: false
+    public static async search(title: string, limit: number | null): Promise<Post[]> {
+        return Post.collection().then(collection => {
+            let cursor = collection.find({
+                $text: {
+                    $search: title,
+                    $caseSensitive: false
+                }
+            })
+            .sort({ _id: -1})
+            .map(result => new Post(result._id.toString(), result.title, result.image, result.content));
+
+            if (limit == null) {
+                return cursor.toArray();
             }
+
+            return cursor.limit(limit).toArray();
         })
-        .sort({ _id: -1})
-        .map(result => new Post(result._id.toString(), result.title, result.image, result.content))
-        .toArray())
     }
 
     /**

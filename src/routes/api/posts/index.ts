@@ -10,8 +10,18 @@ export async function get(event: RequestEvent) {
     // searching for titles is available but not enabled on front-end atm.
     // it's planned to have though, so please keep this till then.
     if (event.url.searchParams.get('title')) {
+        let limit: number | null = null;
+
+        if (event.url.searchParams.get('limit') && !Number.isNaN(event.url.searchParams.get('limit')!)) {
+            limit = Number.parseInt(event.url.searchParams.get('limit')!);
+        }
         return {
-            body: await Post.search(event.url.searchParams.get('title')!).then(result => result.map(post => post.without("content")))
+            body: await Post.search(event.url.searchParams.get('title')!, limit).then(result => result.map(post => {
+                return {
+                    ...post,
+                    timestamp: post.timestamp()
+                }
+            }))
         }
     }
 

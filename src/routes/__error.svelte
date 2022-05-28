@@ -1,6 +1,5 @@
 <script context="module" lang="ts">
     import type { Load } from "@sveltejs/kit";
-import { onMount } from "svelte";
 
     export const load: Load = ({error, status}) => {
         return {

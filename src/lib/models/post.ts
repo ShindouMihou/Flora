@@ -98,6 +98,7 @@ export default class Post implements FloraModel {
     public static async all(): Promise<Post[]> {
         return Post.collection().then(collection => collection.find()
             .map(result => new Post(result._id.toString(), result.title, result.image, result.content))
+            .sort({ _id: -1})
             .toArray())
     }
 
@@ -108,6 +109,7 @@ export default class Post implements FloraModel {
                 $caseSensitive: false
             }
         })
+        .sort({ _id: -1})
         .map(result => new Post(result._id.toString(), result.title, result.image, result.content))
         .toArray())
     }

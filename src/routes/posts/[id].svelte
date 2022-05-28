@@ -41,7 +41,7 @@
             console.error(err);
             return {
                 status: 500,
-                error: err
+                error: err,
             };
         }
     };
@@ -54,6 +54,9 @@
     import PostLoading from "$lib/components/PostLoading.svelte";
     import ErrorBlock from "$lib/components/ErrorBlock.svelte";
     import removeMarkdown from "remove-markdown";
+    import { fade } from "svelte/transition";
+    import { ArrowUp, ChevronUp, Icon } from "svelte-hero-icons";
+    import { onMount } from "svelte";
 
     export let title: string;
     export let image: string;
@@ -63,8 +66,25 @@
     let errors: string[] = [];
     let metaDescription: string = removeMarkdown(content);
 
+    let showBackToTop = false;
+    const BACK_TO_TOP_FEATURE = import.meta.env.VITE_BACK_TO_TOP == null ? true : import.meta.env.VITE_BACK_TO_TOP === 'true';
+
     if (metaDescription.length > 162)
         metaDescription = metaDescription.slice(0, 162) + "...";
+
+    onMount(() => {
+        if (BACK_TO_TOP_FEATURE) {
+            showBackToTop = window.scrollY > 300;
+
+            window.onscroll = () => showBackToTop = window.scrollY > 300;
+        }
+    });
+
+    function backToTop() {
+        document.getElementById("container")!.scrollIntoView({
+            behavior: "smooth"
+        });
+    }
 </script>
 
 <svelte:head>
@@ -87,14 +107,21 @@
         <ErrorBlock message={error} />
     {/each}
 {/if}
-<div class="flex flex-col gap-4">
+{#if showBackToTop}
+    <button class="fixed bottom-5 md:bottom-10 right-5 md:right-16" on:click={backToTop} transition:fade>
+        <div class="p-3 bg-neutral-300 opacity-50 rounded-lg border border-transparent hover:border-blue-500 duration-[250ms]">
+            <Icon src={ArrowUp} class="h-8 w-8 flex-shrink-0" solid />
+        </div>
+    </button>
+{/if}
+<div class="flex flex-col gap-4" id="contentContainer">
     {#if title && image && content}
         <img
             src={image}
             alt="Thumbnail"
             class="w-full h-96 object-cover rounded-lg"
         />
-        <div class="flex flex-col">
+        <div class="flex flex-col" id="titles">
             <h1 id="postTitle" class="text-4xl font-bold monst">{title}</h1>
             <p
                 id="postAuthor"

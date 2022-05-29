@@ -152,7 +152,7 @@
         <img
             src={image}
             alt="Thumbnail"
-            class="w-full h-96 object-cover rounded-lg"
+            class="w-full h-96 object-cover rounded"
         />
         <div class="flex flex-col" id="titles">
             <h1 id="postTitle" class="text-4xl font-bold monst">{title}</h1>

@@ -6,6 +6,11 @@ const POSTS_PER_REQUEST = 10;
 const SORTING_ORDER = 'latest'
 
 export async function get(event: RequestEvent) {
+    let published = true;
+
+    if (event.url.searchParams.get('includeDrafts') != null && event.locals.authenticated) {
+        published = false;
+    }
 
     // searching for titles is available but not enabled on front-end atm.
     // it's planned to have though, so please keep this till then.
@@ -16,7 +21,7 @@ export async function get(event: RequestEvent) {
             limit = Number.parseInt(event.url.searchParams.get('limit')!);
         }
         return {
-            body: await Post.search(event.url.searchParams.get('title')!, limit).then(result => result.map(post => {
+            body: await Post.search(event.url.searchParams.get('title')!, limit, published = published).then(result => result.map(post => {
                 return {
                     ...post,
                     timestamp: post.timestamp()
@@ -26,7 +31,7 @@ export async function get(event: RequestEvent) {
     }
 
     return {
-        body: await Post.all().then(result => result.map(post => {
+        body: await Post.all(published = published).then(result => result.map(post => {
             return {
                 ...post.without("content"),
                 timestamp: post.timestamp()
@@ -51,10 +56,14 @@ export async function put(event: RequestEvent) {
                 return FloraicResponses.INVALID_REQUEST;
             }
 
+            if (body.published == null || typeof body.published !== 'boolean') {
+                return FloraicResponses.INVALID_REQUEST;
+            }
+
             if (!(body.image.startsWith('https://') || body.image.startsWith('http://')))
                 return FloraicResponses.INVALID_REQUEST;
 
-            const post = await Post.create(body.title, body.image, body.content)
+            const post = await Post.create(body.title, body.image, body.content, body.published)
             
             return {
                 body: post,

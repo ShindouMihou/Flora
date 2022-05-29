@@ -11,6 +11,8 @@
     "check:watch": "svelte-check --tsconfig ./tsconfig.json --watch"
   },
   "devDependencies": {
+    "@sveltejs/adapter-auto": "next",
+    "@sveltejs/kit": "next",
     "@types/cookie": "^0.5.1",
     "@types/cookie-signature": "^1.0.4",
     "@types/highlight.js": "^10.1.0",
@@ -18,8 +20,6 @@
     "@types/marked": "^4.0.3",
     "@types/node-emoji": "^1.8.1",
     "@types/remove-markdown": "^0.3.1",
-    "@sveltejs/adapter-auto": "next",
-    "@sveltejs/kit": "next",
     "autoprefixer": "^10.4.4",
     "postcss": "^8.4.12",
     "postcss-load-config": "^3.1.4",

@@ -26,7 +26,7 @@
 
     onMount(() => {
         axios
-            .get("/api/posts")
+            .get("/api/posts?includeDrafts")
             .then((result) => {
                 const results: Post[] = result.data;
 

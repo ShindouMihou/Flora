@@ -4,6 +4,7 @@
     import { onMount } from "svelte";
     import {
         Beaker,
+        Check,
         ChevronDown,
         ChevronUp,
         Cloud,
@@ -12,6 +13,7 @@
         Photograph,
         Save,
         Trash,
+        X,
     } from "svelte-hero-icons";
     import ErrorBlock from "../ErrorBlock.svelte";
     import { fade } from "svelte/transition";
@@ -22,6 +24,7 @@
     let image: string = "";
     let title: string = "";
     let content = "";
+    let published: boolean = false;
 
     let translatedContent = "";
 
@@ -33,6 +36,7 @@
                     image = result.data.image;
                     title = result.data.title;
                     content = result.data.content;
+                    published = result.data.published;
                     initialLoading = true;
                 })
                 .catch((error) => {
@@ -89,9 +93,12 @@
     // Settings for showing the editor, etc..
     let editorClass = "";
     let postSettingsClass = "";
+    let postAdditionalSettingsClass = "";
 
     $: editorBottomIcon = editorClass === "hidden" ? true : false;
     $: postSettingsBottomIcon = postSettingsClass === "hidden" ? true : false;
+    $: postAdditionalSettingsBottomIcon =
+        postAdditionalSettingsClass === "hidden" ? true : false;
 
     // The amount of words calculated from the content.
     $: words = content.split(" ").length;
@@ -103,7 +110,7 @@
             const translated = toHTML(content);
 
             if (translated.error && !translated.content) {
-                errors = [translated.error]
+                errors = [translated.error];
                 translatedContent = translated.error;
             } else {
                 translatedContent = translated.content!;
@@ -176,6 +183,7 @@
                     title: title,
                     image: image,
                     content: content,
+                    published: published,
                 })
                 .then((result) => {
                     initialLoading = true;
@@ -218,6 +226,7 @@
                     title: title,
                     image: image,
                     content: content,
+                    published: published,
                 })
                 .then((result) => {
                     lock = false;
@@ -268,6 +277,19 @@
 
         postSettingsClass = "hidden";
     }
+
+    function togglePostAdditionalSettings() {
+        if (postAdditionalSettingsClass === "hidden") {
+            postAdditionalSettingsClass = "";
+            return;
+        }
+
+        postAdditionalSettingsClass = "hidden";
+    }
+
+    function togglePublished() {
+        published = !published;
+    }
 </script>
 
 <svelte:head>
@@ -284,7 +306,10 @@
     {/each}
 {/if}
 {#if showSaving}
-    <div class="fixed bottom-5 md:bottom-5 left-5 md:left-14 print:hidden" transition:fade>
+    <div
+        class="fixed bottom-5 md:bottom-5 left-5 md:left-14 print:hidden"
+        transition:fade
+    >
         <div
             id="saving-context"
             class="flex flex-row justify-between items-center w-full bg-black dark:bg-white text-white p-4 mb-4 
@@ -317,156 +342,203 @@
 {:else}
     <div class="flex flex-col gap-4">
         <div
-            class="flex flex-row gap-1 items-center hover:cursor-pointer"
-            on:click={togglePostSettings}
-        >
-            <p>Post Settings</p>
-            {#if postSettingsBottomIcon}
-                <Icon src={ChevronDown} class="h-6 w-6 flex-shrink-0" />
-            {:else}
-                <Icon src={ChevronUp} class="h-6 w-6 flex-shrink-0" />
-            {/if}
-        </div>
-        <div
-            class="opensans w-full flex flex-col gap-2 {postSettingsClass}"
-            id="settings"
-        >
-            {#if !image}
-                <div class="w-full h-96 bg-gray-500 rounded-xl">
-                    <div class="p-4 drop-shadow shadow-white">
-                        <h1
-                            class="monst text-white font-bold text-4xl md:text-2xl"
-                        >
-                            {title}
-                        </h1>
-                    </div>
-                </div>
-            {:else}
-                <div
-                    class="w-full h-96 bg-gray-500 rounded-xl relative overflow-hidden"
-                >
-                    <div
-                        class="absolute w-full h-full bg-cover inset-0 bg-center blur-sm opacity-80"
-                        style="background-image: url('{image}');"
-                    />
-                    <div class="relative p-4 drop-shadow shadow-white">
-                        <h1
-                            class="monst text-white font-bold text-4xl md:text-2xl"
-                        >
-                            {title}
-                        </h1>
-                    </div>
-                </div>
-            {/if}
-            <input
-                type="text"
-                disabled={lock}
-                class="outline-none opensans border p-4 duration-[250ms] w-full dark:bg-black dark:focus:bg-white dark:focus:text-black focus:bg-black focus:text-white"
-                placeholder="Post Title"
-                bind:value={title}
-            />
-            <input
-                type="text"
-                disabled={lock}
-                class="outline-none opensans border p-4 duration-[250ms] w-full dark:bg-black dark:focus:bg-white dark:focus:text-black focus:bg-black focus:text-white"
-                placeholder="Post Image"
-                bind:value={image}
-            />
-        </div>
-        <div
-            class="flex flex-row gap-1 items-center hover:cursor-pointer"
-            on:click={toggleEditor}
-        >
-            <p>Editor</p>
-            {#if editorBottomIcon}
-                <Icon src={ChevronDown} class="h-6 w-6 flex-shrink-0" />
-            {:else}
-                <Icon src={ChevronUp} class="h-6 w-6 flex-shrink-0" />
-            {/if}
-        </div>
-        <div
-            class="min-h-screen bg-neutral-900 text-white opensans {editorClass}"
-            id="editor"
+            class="flex flex-col gap-2 p-4 border border-black dark:border-white opensans w-full"
         >
             <div
-                class="bg-white dark:bg-black dark:shadow-none dark:border dark:border-white p-4 rounded shadow shadow-black"
+                class="flex flex-row gap-1 items-center hover:cursor-pointer"
+                on:click={togglePostSettings}
             >
-                <div class="flex flex-row justify-between gap-4">
-                    <div
-                        class="flex flex-row justify-between w-full text-neutral-500 align-middle items-center"
-                    >
-                        <h4
-                            class="text-neutral-500 font-bold text-lg uppercase m-0"
+                <h4 class="monst text-xl">Settings</h4>
+                {#if postSettingsBottomIcon}
+                    <p>+</p>
+                {:else}
+                    <p>-</p>
+                {/if}
+            </div>
+            <div class={postSettingsClass} id="settings">
+                <div class="flex flex-col gap-2">
+                    {#if !image}
+                        <div class="w-full h-96 bg-gray-500">
+                            <div class="p-4 drop-shadow shadow-white">
+                                <h1
+                                    class="monst text-white font-bold text-4xl md:text-2xl"
+                                >
+                                    {title}
+                                </h1>
+                            </div>
+                        </div>
+                    {:else}
+                        <div
+                            class="w-full h-96 bg-gray-500 relative overflow-hidden"
                         >
-                            {words} words
-                        </h4>
-                        <div class="flex flex-row gap-4">
-                            <button
-                                on:click={switchMode}
-                                class="flex flex-row gap-1 items-center"
-                                aria-label="Markdown/Raw Mode"
-                            >
-                                <Icon
-                                    src={Beaker}
-                                    solid={mode === 0 ? false : true}
-                                    class="h-6 w-6"
-                                />
-                                <p class="hidden md:block">{modeText}</p>
-                            </button>
-                            <button
-                                on:click={save}
-                                class="flex flex-row gap-1 items-center"
-                                aria-label="Save"
-                            >
-                                <Icon src={Save} class="h-6 w-6" />
-                                <p class="hidden md:block">Save</p>
-                            </button>
-                            {#if postId !== null}
-                                <a
-                                    href="/posts/{postId}"
-                                    class="flex flex-row gap-1 items-center"
-                                    aria-label="Open"
-                                    target="_blank"
+                            <div
+                                class="absolute w-full h-full bg-cover inset-0 bg-center blur-sm opacity-80"
+                                style="background-image: url('{image}');"
+                            />
+                            <div class="relative p-4 drop-shadow shadow-white">
+                                <h1
+                                    class="monst text-white font-bold text-4xl md:text-2xl"
                                 >
-                                    <Icon src={Photograph} class="h-6 w-6" />
-                                    <p class="hidden md:block">Open</p>
-                                </a>
-                            {/if}
-                            {#if postId !== null}
-                                <button
-                                    on:click={del}
-                                    class="flex flex-row gap-1 items-center"
-                                    aria-label="Save"
-                                >
-                                    <Icon src={Trash} class="h-6 w-6" />
-                                    <p class="hidden md:block">Delete</p>
-                                </button>
-                            {/if}
+                                    {title}
+                                </h1>
+                            </div>
+                        </div>
+                    {/if}
+                    <input
+                        type="text"
+                        disabled={lock}
+                        class="outline-none opensans border p-4 duration-[250ms] w-full dark:text-black dark:focus:bg-white dark:focus:text-black focus:bg-black focus:text-white"
+                        placeholder="Post Title"
+                        bind:value={title}
+                    />
+                    <input
+                        type="text"
+                        disabled={lock}
+                        class="outline-none opensans border p-4 duration-[250ms] w-full dark:text-black dark:focus:bg-white dark:focus:text-black focus:bg-black focus:text-white"
+                        placeholder="Post Image"
+                        bind:value={image}
+                    />
+                </div>
+                <div
+                    class="flex flex-col p-2 py-4 my-2 border border-black dark:border-white"
+                >
+                    <div
+                        class="flex flex-row gap-1 items-center hover:cursor-pointer"
+                        on:click={togglePostAdditionalSettings}
+                    >
+                        <h4 class="monst text-md">Additional Settings</h4>
+                        {#if postAdditionalSettingsBottomIcon}
+                            <p class="text-md">+</p>
+                        {:else}
+                            <p class="text-md">-</p>
+                        {/if}
+                    </div>
+                    <div class="flex flex-col gap-2 p-2 {postAdditionalSettingsClass}">
+                        <div class="flex flex-row gap-2 items-center">
+                            <button on:click={togglePublished}>
+                                {#if !published}
+                                    <Icon
+                                        src={Check}
+                                        class="h-5 w-5 flex-shrink-0"
+                                    />
+                                {:else}
+                                    <Icon
+                                        src={X}
+                                        class="h-5 w-5 flex-shrink-0"
+                                    />
+                                {/if}
+                            </button>
+                            <p class="monst text-sm">DRAFT</p>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="px-6 md:px-12 flex flex-col w-full">
-                <div class="w-full py-6">
-                    <h2
-                        class="text-neutral-500 font-bold text-lg uppercase p-0 m-0 border-b-0 leading-none"
-                    >
-                        EDITOR
-                    </h2>
+        </div>
+        <div
+            class="flex flex-col gap-2 p-4 border border-black dark:border-white opensans w-full"
+        >
+            <div
+                class="flex flex-row gap-1 items-center hover:cursor-pointer"
+                on:click={toggleEditor}
+            >
+                <h4 class="monst text-xl">Editor</h4>
+                {#if editorBottomIcon}
+                    <p>+</p>
+                {:else}
+                    <p>-</p>
+                {/if}
+            </div>
+            <div class={editorClass} id="editor">
+                <div
+                    class="dark:bg-white border border-black dark:border-white p-4"
+                >
+                    <div class="flex flex-row justify-between gap-4">
+                        <div
+                            class="flex flex-row justify-between w-full text-neutral-500 align-middle items-center"
+                        >
+                            <h4
+                                class="text-neutral-500 font-bold text-lg uppercase m-0"
+                            >
+                                {words} words
+                            </h4>
+                            <div class="flex flex-row gap-4">
+                                <button
+                                    on:click={switchMode}
+                                    class="flex flex-row gap-1 items-center"
+                                    aria-label="Markdown/Raw Mode"
+                                >
+                                    <Icon
+                                        src={Beaker}
+                                        solid={mode === 0 ? false : true}
+                                        class="h-6 w-6"
+                                    />
+                                    <p class="hidden md:block">
+                                        {modeText}
+                                    </p>
+                                </button>
+                                <button
+                                    on:click={save}
+                                    class="flex flex-row gap-1 items-center"
+                                    aria-label="Save"
+                                >
+                                    <Icon src={Save} class="h-6 w-6" />
+                                    <p class="hidden md:block">Save</p>
+                                </button>
+                                {#if postId !== null}
+                                    <a
+                                        href="/posts/{postId}"
+                                        class="flex flex-row gap-1 items-center"
+                                        aria-label="Open"
+                                        target="_blank"
+                                    >
+                                        <Icon
+                                            src={Photograph}
+                                            class="h-6 w-6"
+                                        />
+                                        <p class="hidden md:block">Open</p>
+                                    </a>
+                                {/if}
+                                {#if postId !== null}
+                                    <button
+                                        on:click={del}
+                                        class="flex flex-row gap-1 items-center"
+                                        aria-label="Save"
+                                    >
+                                        <Icon src={Trash} class="h-6 w-6" />
+                                        <p class="hidden md:block">Delete</p>
+                                    </button>
+                                {/if}
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div
-                    class="{markdownClass} text-2xl min-h-screen resize-none py-2 mkdown open-sans"
-                    id="markdown"
+                    class="min-h-screen bg-neutral-900 text-white dark:border dark:border-white opensans {editorClass}"
+                    id="editor"
                 >
-                    {@html translatedContent}
+                    <div class="px-6 md:px-12 flex flex-col w-full">
+                        <div class="w-full py-6">
+                            <h2
+                                class="text-neutral-500 font-bold text-lg uppercase p-0 m-0 border-b-0 leading-none"
+                            >
+                                EDITOR
+                            </h2>
+                        </div>
+                        <div
+                            class="{markdownClass} text-2xl min-h-screen resize-none py-2 mkdown open-sans"
+                            id="markdown"
+                        >
+                            {@html translatedContent}
+                        </div>
+                        <textarea
+                            class="text-neutral-50 bg-neutral-900 outline-none text-base placeholder:text-neutral-600 min-h-screen resize-none selection:text-black selection:bg-white {textEditorClass}"
+                            bind:value={content}
+                            placeholder="You are who defines the limitations of what you can write."
+                            id="text"
+                            disabled={lock}
+                        />
+                    </div>
                 </div>
-                <textarea
-                    class="text-neutral-50 bg-neutral-900 outline-none text-base placeholder:text-neutral-600 min-h-screen resize-none selection:text-black selection:bg-white {textEditorClass}"
-                    bind:value={content}
-                    placeholder="You are who defines the limitations of what you can write."
-                    id="text"
-                    disabled={lock}
-                />
             </div>
         </div>
     </div>

@@ -7,12 +7,14 @@ export default class Post implements FloraModel {
     image: string | null;
     title: string;
     content: string;
+    published: boolean;
 
-    constructor(_id: string, title: string, image: string | null, content: string) {
+    constructor(_id: string, title: string, image: string | null, content: string, published: boolean = true) {
         this._id = _id;
         this.image = image;
         this.title = title;
         this.content = content;
+        this.published = published;
     }
 
     public timestamp() {
@@ -91,27 +93,46 @@ export default class Post implements FloraModel {
     }
 
     /**
+     * Generates the search body or query that should be used or extended when finding one or more posts.
+     * 
+     * @param published Should we include only published posts?
+     * @returns The search query that should be used or extended for finding one or more posts.
+     */
+    private static createBody(published: boolean): any {
+        if (published) {
+            return {
+                published: {
+                    $in: [null, true]
+                }
+            }
+        }
+        
+        return {}
+    }
+
+    /**
      * Gets all the posts available in the database.
      * 
      * @returns All the posts available in the database.
      */
-    public static async all(): Promise<Post[]> {
-        return Post.collection().then(collection => collection.find()
-            .map(result => new Post(result._id.toString(), result.title, result.image, result.content))
-            .sort({ _id: -1})
-            .toArray())
+    public static async all(published: boolean = true): Promise<Post[]> {
+        return Post.collection().then(collection => collection.find(Post.createBody(published = published))
+        .map(result => new Post(result._id.toString(), result.title, result.image, result.content, result.published ?? true))
+        .sort({ _id: -1})
+        .toArray())
     }
 
-    public static async search(title: string, limit: number | null): Promise<Post[]> {
+    public static async search(title: string, limit: number | null, published: boolean = true): Promise<Post[]> {
         return Post.collection().then(collection => {
             let cursor = collection.find({
+                ...Post.createBody(published = published),
                 $text: {
                     $search: title,
                     $caseSensitive: false
                 }
             })
             .sort({ _id: -1})
-            .map(result => new Post(result._id.toString(), result.title, result.image, result.content));
+            .map(result => new Post(result._id.toString(), result.title, result.image, result.content, result.published ?? true));
 
             if (limit == null) {
                 return cursor.toArray();
@@ -126,13 +147,14 @@ export default class Post implements FloraModel {
      * 
      * @returns All the posts available in the database after the given post.
      */
-    public static async after(post: ObjectId, limit: number, sort: 'latest' | 'oldest'): Promise<Post[]> {
+    public static async after(post: ObjectId, limit: number, sort: 'latest' | 'oldest', published: boolean = true): Promise<Post[]> {
         return Post.collection().then(collection => collection.find({
+            ...Post.createBody(published = published),
             _id: {
                 $lt: post
             }
         })
-        .map(result => new Post(result._id.toString(), result.title, result.image, result.content))
+        .map(result => new Post(result._id.toString(), result.title, result.image, result.content, result.published ?? true))
         .limit(limit)
         .sort(
             sort === 'latest'
@@ -151,13 +173,14 @@ export default class Post implements FloraModel {
      * 
      * @returns All the posts available in the database before the given post.
     */
-    public static async before(post: ObjectId, limit: number, sort: 'latest' | 'oldest'): Promise<Post[]> {
+    public static async before(post: ObjectId, limit: number, sort: 'latest' | 'oldest', published: boolean = true): Promise<Post[]> {
             return Post.collection().then(collection => collection.find({
+                ...Post.createBody(published = published),
                 _id: {
                     $gt: post
                 }
             })
-            .map(result => new Post(result._id.toString(), result.title, result.image, result.content))
+            .map(result => new Post(result._id.toString(), result.title, result.image, result.content, result.published ?? true))
             .limit(limit)
             .sort(
                 sort === 'latest'
@@ -182,7 +205,7 @@ export default class Post implements FloraModel {
             _id: new ObjectId(id)
         })).then(result => {
             if (result) {
-                return new Post(result._id.toString(), result.title, result.image, result.content)
+                return new Post(result._id.toString(), result.title, result.image, result.content, result.published ?? true)
             }
 
             return null
@@ -197,8 +220,8 @@ export default class Post implements FloraModel {
      * @param content The content of the post to create.
      * @returns A simple {@link Post} object.
      */
-    public static async create(title: string, image: string | null, content: string): Promise<Post> {
-        const post = new Post('', title, image, content)
+    public static async create(title: string, image: string | null, content: string, published: boolean): Promise<Post> {
+        const post = new Post('', title, image, content, published)
 
         return Post.collection().then(collection => collection.insertOne(post.without('_id'))).then(result => {
             post._id = result.insertedId.toString();

@@ -26,6 +26,8 @@
     let title: string = "";
     let content = "";
 
+    let translatedContent = "";
+
     onMount(() => {
         if (postId !== null && !initialLoading) {
             axios
@@ -75,6 +77,27 @@
         });
     });
 
+    function toHTML(text: string): string {
+        try {
+            return marked(emojis(text), {
+                smartypants: true,
+                gfm: true,
+                highlight: (code, lang) => {
+                    if (lang == "" || !hljs.getLanguage(lang)) {
+                        return hljs.highlightAuto(code).value;
+                    }
+
+                    return hljs.highlight(code, {
+                        language: lang,
+                    }).value;
+                },
+            });
+        } catch (error: any) {
+            errors = [error.message];
+            return error.message;
+        }
+    }
+
     // This is a lock to prevent saving too much.
     let lock = false;
     let showSaving = false;
@@ -101,6 +124,7 @@
 
     function switchMode() {
         if (mode === 0) {
+            translatedContent = toHTML(content);
             mode = 1;
             return;
         }
@@ -177,12 +201,12 @@
                     url.pathname = "/editor/" + postId;
                     window.history.pushState({}, "", url);
                     lock = false;
-                    setTimeout(() => showSaving = false, 1000);
+                    setTimeout(() => (showSaving = false), 1000);
                 })
                 .catch((error) => {
                     setTimeout(() => {
                         lock = false;
-                        setTimeout(() => showSaving = false, 1000);
+                        setTimeout(() => (showSaving = false), 1000);
                         let tempErrors = [];
                         if (error.response) {
                             tempErrors.push(
@@ -213,12 +237,12 @@
                 })
                 .then((result) => {
                     lock = false;
-                    setTimeout(() => showSaving = false, 1000);
+                    setTimeout(() => (showSaving = false), 1000);
                 })
                 .catch((error) => {
                     setTimeout(() => {
                         lock = false;
-                        setTimeout(() => showSaving = false, 1000);
+                        setTimeout(() => (showSaving = false), 1000);
                         let tempErrors = [];
                         if (error.response) {
                             tempErrors.push(
@@ -379,7 +403,9 @@
             class="min-h-screen bg-neutral-900 text-white opensans {editorClass}"
             id="editor"
         >
-            <div class="bg-white dark:bg-black dark:shadow-none dark:border dark:border-white p-4 rounded shadow shadow-black">
+            <div
+                class="bg-white dark:bg-black dark:shadow-none dark:border dark:border-white p-4 rounded shadow shadow-black"
+            >
                 <div class="flex flex-row justify-between gap-4">
                     <div
                         class="flex flex-row justify-between w-full text-neutral-500 align-middle items-center"
@@ -447,19 +473,7 @@
                     class="{markdownClass} text-2xl min-h-screen resize-none py-2 mkdown open-sans"
                     id="markdown"
                 >
-                    {@html marked(emojis(content), {
-                        smartypants: true,
-                        gfm: true,
-                        highlight: (code, lang) => {
-                            if (lang == "") {
-                                return hljs.highlightAuto(code).value;
-                            }
-
-                            return hljs.highlight(code, {
-                                language: lang,
-                            }).value;
-                        },
-                    })}
+                    {@html translatedContent}
                 </div>
                 <textarea
                     class="text-neutral-50 bg-neutral-900 outline-none text-base placeholder:text-neutral-600 min-h-screen resize-none selection:text-black selection:bg-white {textEditorClass}"

@@ -93,6 +93,27 @@
             behavior: "smooth"
         });
     }
+
+    function toHTML(text: string): string {
+        try {
+            return marked(emojis(text), {
+                smartypants: true,
+                gfm: true,
+                highlight: (code, lang) => {
+                    if (lang == "" || !hljs.getLanguage(lang)) {
+                        return hljs.highlightAuto(code).value;
+                    }
+
+                    return hljs.highlight(code, {
+                        language: lang,
+                    }).value;
+                },
+            });
+        } catch (error: any) {
+            errors = [error.message];
+            return error.message;
+        }
+    }
 </script>
 
 <svelte:head>
@@ -153,19 +174,7 @@
             </p>
         </div>
         <div class="mkdown flex flex-col gap-1 opensans">
-            {@html marked(emojis(content), {
-                smartypants: true,
-                gfm: true,
-                highlight: (code, lang) => {
-                    if (lang == "") {
-                        return hljs.highlightAuto(code).value;
-                    }
-
-                    return hljs.highlight(code, {
-                        language: lang,
-                    }).value;
-                },
-            })}
+            {@html toHTML(content)}
         </div>
     {:else}
         <PostLoading />

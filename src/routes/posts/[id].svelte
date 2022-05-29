@@ -48,15 +48,13 @@
 </script>
 
 <script lang="ts">
-    import { emojis } from "$lib/content";
-    import { marked } from "marked";
-    import hljs from "highlight.js";
     import PostLoading from "$lib/components/PostLoading.svelte";
     import ErrorBlock from "$lib/components/ErrorBlock.svelte";
     import removeMarkdown from "remove-markdown";
     import { fade } from "svelte/transition";
     import { ArrowUp, Icon } from "svelte-hero-icons";
     import { onMount } from "svelte";
+    import { toHTML } from "$lib/renderer/markdown";
 
     export let title: string;
     export let image: string;
@@ -68,14 +66,15 @@
 
     let showBackToTop = false;
 
-    const BACK_TO_TOP_FEATURE = import.meta.env.VITE_BACK_TO_TOP == null 
-        ? true 
-        : import.meta.env.VITE_BACK_TO_TOP === 'true';
+    const BACK_TO_TOP_FEATURE =
+        import.meta.env.VITE_BACK_TO_TOP == null
+            ? true
+            : import.meta.env.VITE_BACK_TO_TOP === "true";
 
-    const DISALLOW_SELECT_CODEBLOCKS = import.meta.env.VITE_DISALLOW_SELECT_CODEBLOCKS == null 
-        ? false 
-        : import.meta.env.VITE_DISALLOW_SELECT_CODEBLOCKS === 'true';
-
+    const DISALLOW_SELECT_CODEBLOCKS =
+        import.meta.env.VITE_DISALLOW_SELECT_CODEBLOCKS == null
+            ? false
+            : import.meta.env.VITE_DISALLOW_SELECT_CODEBLOCKS === "true";
 
     if (metaDescription.length > 162)
         metaDescription = metaDescription.slice(0, 162) + "...";
@@ -84,35 +83,25 @@
         if (BACK_TO_TOP_FEATURE) {
             showBackToTop = window.scrollY > 300;
 
-            window.onscroll = () => showBackToTop = window.scrollY > 300;
+            window.onscroll = () => (showBackToTop = window.scrollY > 300);
         }
     });
 
     function backToTop() {
         document.getElementById("container")!.scrollIntoView({
-            behavior: "smooth"
+            behavior: "smooth",
         });
     }
 
-    function toHTML(text: string): string {
-        try {
-            return marked(emojis(text), {
-                smartypants: true,
-                gfm: true,
-                highlight: (code, lang) => {
-                    if (lang == "" || !hljs.getLanguage(lang)) {
-                        return hljs.highlightAuto(code).value;
-                    }
+    function html(content: string) {
+        const translated = toHTML(content);
 
-                    return hljs.highlight(code, {
-                        language: lang,
-                    }).value;
-                },
-            });
-        } catch (error: any) {
-            errors = [error.message];
-            return error.message;
+        if (translated.error && !translated.content) {
+            errors = [translated.error];
+            return translated.error;
         }
+
+        return translated.content!;
     }
 </script>
 
@@ -130,13 +119,13 @@
         href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/styles/atom-one-dark.min.css"
     />
     {#if DISALLOW_SELECT_CODEBLOCKS}
-    <style>
-        .mkdown pre {
-            user-select: none;
-            -web-kit-user-select: none;
-            -ms-user-select: none;
-        }
-    </style>
+        <style>
+            .mkdown pre {
+                user-select: none;
+                -web-kit-user-select: none;
+                -ms-user-select: none;
+            }
+        </style>
     {/if}
 </svelte:head>
 
@@ -146,8 +135,14 @@
     {/each}
 {/if}
 {#if showBackToTop}
-    <button class="fixed bottom-5 md:bottom-10 right-5 md:right-16 print:hidden" on:click={backToTop} transition:fade>
-        <div class="p-3 bg-neutral-300 opacity-50 rounded-lg border border-transparent hover:border-blue-500 duration-[250ms]">
+    <button
+        class="fixed bottom-5 md:bottom-10 right-5 md:right-16 print:hidden"
+        on:click={backToTop}
+        transition:fade
+    >
+        <div
+            class="p-3 bg-neutral-300 opacity-50 rounded-lg border border-transparent hover:border-blue-500 duration-[250ms]"
+        >
             <Icon src={ArrowUp} class="h-8 w-8 flex-shrink-0" solid />
         </div>
     </button>
@@ -174,7 +169,7 @@
             </p>
         </div>
         <div class="mkdown flex flex-col gap-1 opensans">
-            {@html toHTML(content)}
+            {@html html(content)}
         </div>
     {:else}
         <PostLoading />

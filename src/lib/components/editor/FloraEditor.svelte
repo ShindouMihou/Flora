@@ -1,9 +1,6 @@
 <script lang="ts">
-    import { emojis } from "$lib/content";
+    import { toHTML } from "$lib/renderer/markdown";
     import axios from "axios";
-    import hljs from "highlight.js";
-
-    import { marked } from "marked";
     import { onMount } from "svelte";
 
     import {
@@ -77,26 +74,10 @@
         });
     });
 
-    function toHTML(text: string): string {
-        try {
-            return marked(emojis(text), {
-                smartypants: true,
-                gfm: true,
-                highlight: (code, lang) => {
-                    if (lang == "" || !hljs.getLanguage(lang)) {
-                        return hljs.highlightAuto(code).value;
-                    }
 
-                    return hljs.highlight(code, {
-                        language: lang,
-                    }).value;
-                },
-            });
-        } catch (error: any) {
-            errors = [error.message];
-            return error.message;
-        }
-    }
+
+
+    
 
     // This is a lock to prevent saving too much.
     let lock = false;
@@ -124,7 +105,15 @@
 
     function switchMode() {
         if (mode === 0) {
-            translatedContent = toHTML(content);
+            const translated = toHTML(content);
+
+            if (translated.error && !translated.content) {
+                errors = [translated.error]
+                translatedContent = translated.error;
+            } else {
+                translatedContent = translated.content!;
+            }
+
             mode = 1;
             return;
         }

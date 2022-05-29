@@ -16,8 +16,12 @@
 }
 
 @layer base {
-    .mkdown a {
+    .mkdown a:not(.flora-anchor) {
         @apply text-blue-400 hover:opacity-90 transition-[250ms] hover:underline underline-offset-4;
+    }
+
+    .flora-anchor {
+        @apply hover:opacity-90 transition-[250ms] hover:underline underline-offset-4 w-fit;
     }
     
     .mkdown button {

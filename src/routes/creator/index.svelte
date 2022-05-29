@@ -76,9 +76,9 @@
     <hr>
     <div>
         <h2 class="text-2xl font-bold monst uppercase">CREATOR <span class="inverse mix-blend-lighten">DASHBOARD</span></h2>
-        <p class="text-lg opensans">A kingdom isn't made in one day, it was created with the sweat, efforts and tears of man.</p>
+        <p class="text-lg opensans">Kingdoms aren't made in a single day, they are made with patience, sweat, blood and tears of men.</p>
     </div>
-    <a href="editor" class="w-full h-96 bg-gray-500 rounded-xl relative overflow-hidden">
+    <a href="editor" class="w-full h-96 bg-gray-500 rounded relative overflow-hidden">
         <div class="p-4 drop-shadow shadow-white">
             <h1 class="monst text-white font-bold text-4xl md:text-2xl">Make a new article.</h1>
         </div>

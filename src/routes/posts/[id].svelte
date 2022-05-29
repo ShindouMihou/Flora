@@ -76,8 +76,9 @@
             ? false
             : import.meta.env.VITE_DISALLOW_SELECT_CODEBLOCKS === "true";
 
-    if (metaDescription.length > 162)
-        metaDescription = metaDescription.slice(0, 162) + "...";
+    // The OpenGraph specifications indicate 1-2 sentences instead of 165 characters.
+    // https://ogp.me/#optional
+    metaDescription = metaDescription.split('.', 2).join('.') + "."; 
 
     onMount(() => {
         if (BACK_TO_TOP_FEATURE) {
@@ -114,6 +115,8 @@
     <meta name="og:type" content="article" />
     <meta name="article:published_time" content={timestamp.toISOString()} />
     <meta name="article:author" content={import.meta.env.VITE_DISPLAY_NAME} />
+    <meta name="author" content={import.meta.env.VITE_DISPLAY_NAME} />
+    <meta name="twitter:card" content="summary_large_image"/>
     <link
         rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/styles/atom-one-dark.min.css"

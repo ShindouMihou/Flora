@@ -33,7 +33,7 @@
     }
 
     .mkdown code {
-        @apply bg-black dark:bg-neutral-900 rounded resize-none overflow-x-scroll;
+        @apply bg-black dark:bg-neutral-900 text-white rounded resize-none overflow-x-scroll;
     }
 
     .mkdown p {

@@ -2,7 +2,6 @@
     import { toHTML } from "$lib/renderer/markdown";
     import axios from "axios";
     import { onMount } from "svelte";
-
     import {
         Beaker,
         ChevronDown,
@@ -15,6 +14,7 @@
         Trash,
     } from "svelte-hero-icons";
     import ErrorBlock from "../ErrorBlock.svelte";
+    import { fade } from "svelte/transition";
 
     export let postId: string | null = null;
     let initialLoading = false;
@@ -73,11 +73,6 @@
             }
         });
     });
-
-
-
-
-    
 
     // This is a lock to prevent saving too much.
     let lock = false;
@@ -190,12 +185,12 @@
                     url.pathname = "/editor/" + postId;
                     window.history.pushState({}, "", url);
                     lock = false;
-                    setTimeout(() => (showSaving = false), 1000);
+                    setTimeout(() => (showSaving = false), 1500);
                 })
                 .catch((error) => {
                     setTimeout(() => {
                         lock = false;
-                        setTimeout(() => (showSaving = false), 1000);
+                        setTimeout(() => (showSaving = false), 1500);
                         let tempErrors = [];
                         if (error.response) {
                             tempErrors.push(
@@ -226,12 +221,12 @@
                 })
                 .then((result) => {
                     lock = false;
-                    setTimeout(() => (showSaving = false), 1000);
+                    setTimeout(() => (showSaving = false), 1500);
                 })
                 .catch((error) => {
                     setTimeout(() => {
                         lock = false;
-                        setTimeout(() => (showSaving = false), 1000);
+                        setTimeout(() => (showSaving = false), 1500);
                         let tempErrors = [];
                         if (error.response) {
                             tempErrors.push(
@@ -289,10 +284,11 @@
     {/each}
 {/if}
 {#if showSaving}
-    <div class="fixed bottom-5 z-50">
+    <div class="fixed bottom-5 md:bottom-5 left-5 md:left-14 print:hidden" transition:fade>
         <div
             id="saving-context"
-            class="flex flex-row justify-between items-center w-full bg-green-200 p-4 mb-4 text-black rounded-sm animate-pulse"
+            class="flex flex-row justify-between items-center w-full bg-black dark:bg-white text-white p-4 mb-4 
+                dark:text-black border-green-500 border-b-2 rounded"
         >
             <div class="flex flex-row gap-2 items-center">
                 <Icon

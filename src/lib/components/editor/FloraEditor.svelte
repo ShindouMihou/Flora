@@ -5,8 +5,6 @@
     import {
         Beaker,
         Check,
-        ChevronDown,
-        ChevronUp,
         Cloud,
         Icon,
         Newspaper,
@@ -27,6 +25,7 @@
     let published: boolean = false;
 
     let translatedContent = "";
+    let listenersAttached = false;
 
     onMount(() => {
         if (postId !== null && !initialLoading) {
@@ -61,22 +60,46 @@
                     console.log(error);
                 });
 
-            document.addEventListener("keydown", (event) => {
-                if (event.ctrlKey && event.key === "s") {
-                    event.preventDefault();
-                    save();
-                }
-            });
+            enableTabsOnEditor();
+            enableCtrlS();
             return;
         }
 
+        enableTabsOnEditor();
+        enableCtrlS();
+    });
+
+    function enableCtrlS() {
         document.addEventListener("keydown", (event) => {
             if (event.ctrlKey && event.key === "s") {
                 event.preventDefault();
                 save();
             }
         });
-    });
+    }
+
+    function enableTabsOnEditor() {
+        if (listenersAttached) return;
+
+        setTimeout(() => {
+            listenersAttached = true;
+            document
+                .querySelector("textarea")!
+                .addEventListener("keydown", function (event) {
+                    if (event.key === "Tab") {
+                        event.preventDefault();
+                        const start = this.selectionStart;
+                        const end = this.selectionEnd;
+
+                        this.value =
+                            this.value.substring(0, start) +
+                            "\t" +
+                            this.value.substring(end);
+                        this.selectionStart = this.selectionEnd = start + 1;
+                    }
+                });
+        }, 1000);
+    }
 
     // This is a lock to prevent saving too much.
     let lock = false;
@@ -413,7 +436,9 @@
                             <p class="text-md">-</p>
                         {/if}
                     </div>
-                    <div class="flex flex-col gap-2 p-2 {postAdditionalSettingsClass}">
+                    <div
+                        class="flex flex-col gap-2 p-2 {postAdditionalSettingsClass}"
+                    >
                         <div class="flex flex-row gap-2 items-center">
                             <button on:click={togglePublished}>
                                 {#if !published}
@@ -448,7 +473,7 @@
                     <p>-</p>
                 {/if}
             </div>
-            <div class={editorClass} id="editor">
+            <div class={editorClass} id="editorContainer">
                 <div
                     class="dark:bg-white border border-black dark:border-white p-4"
                 >

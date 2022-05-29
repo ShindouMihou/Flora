@@ -23,6 +23,10 @@ const renderer = {
 
 marked.use({ renderer })
 
+function displayLanguage(lang: string) {
+    return (`<div class="pb-2 text-xs text-slate-400 select-none">${lang.slice(0, 1).toUpperCase() + lang.slice(1)}</div>`)
+}
+
 export function toHTML(text: string): MarkdownResult {
     try {
         return {
@@ -31,10 +35,11 @@ export function toHTML(text: string): MarkdownResult {
                 gfm: true,
                 highlight: (code, lang) => {
                     if (lang == "" || !hljs.getLanguage(lang)) {
-                        return hljs.highlightAuto(code).value;
+                        const automatic = hljs.highlightAuto(code);
+                        return displayLanguage(automatic.language ?? 'unknown') + automatic.value;
                     }
     
-                    return hljs.highlight(code, {
+                    return displayLanguage(lang) + hljs.highlight(code, {
                         language: lang,
                     }).value;
                 },

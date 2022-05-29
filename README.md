@@ -1,4 +1,4 @@
-![image](https://user-images.githubusercontent.com/69381903/170740789-518da8d9-0c95-4532-9311-9bd5450097a6.png)
+![image](https://user-images.githubusercontent.com/69381903/170856789-89035499-6171-4ab3-b80f-5f873d92a57b.png)
 <div align="center">
 A simple, markdown-based blog platform written completely in Typescript, Sveltekit and Tailwind.
 </div>
@@ -81,16 +81,16 @@ Flora is far from reaching stable release and at the moment is on development ve
   <summary>Previews</summary>
   
 Creator Dashboard
-![image](https://user-images.githubusercontent.com/69381903/170739685-985a89fd-6f9f-4fd7-9796-8a51a697c5b1.png)
+![image](https://user-images.githubusercontent.com/69381903/170856742-fe594408-6931-4085-bdeb-d20cbb3017f7.png)
   
 Editor
-![image](https://user-images.githubusercontent.com/69381903/170739826-218f9b49-8159-4817-b13e-f416c767ad07.png)
- 
+![image](https://user-images.githubusercontent.com/69381903/170856757-729bf0f3-99be-4898-bfb0-5eca7e4bd46d.png) 
+
 Homepage
-![image](https://user-images.githubusercontent.com/69381903/170739901-57ccd511-9b8b-4555-b571-faf7f09444c8.png)
+![image](https://user-images.githubusercontent.com/69381903/170856789-89035499-6171-4ab3-b80f-5f873d92a57b.png)
 
 Article Page
-![image](https://user-images.githubusercontent.com/69381903/170739943-04572b03-ea2a-4b17-92f5-0847121f7381.png)
+![image](https://user-images.githubusercontent.com/69381903/170857932-4ab0c1ec-9d8b-4fd6-92c2-e2816049222f.png)
 </details>
 
 ### 💌 Show Flora some love!

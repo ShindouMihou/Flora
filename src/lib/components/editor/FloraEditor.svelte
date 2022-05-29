@@ -312,8 +312,8 @@
     >
         <div
             id="saving-context"
-            class="flex flex-row justify-between items-center w-full bg-black dark:bg-white text-white p-4 mb-4 
-                dark:text-black border-green-500 border-b-2 rounded"
+            class="flex flex-row justify-between items-center w-full dark:bg-black bg-white  p-4 mb-4 
+                dark:text-white shadow-xl dark:shadow-none dark:border-green-500 dark:border rounded"
         >
             <div class="flex flex-row gap-2 items-center">
                 <Icon

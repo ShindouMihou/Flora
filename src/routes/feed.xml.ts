@@ -36,7 +36,7 @@ const feedify = async (origin: string) => {
         <title>${ import.meta.env.VITE_APP_NAME }</title>
         <description>${ import.meta.env.VITE_SEO_DESCRIPTION }</description>
         <link>${ origin }</link>
-        <lastBuildDate>${ posts[posts.length - 1].timestamp().toUTCString() }</lastBuildDate>
+        <lastBuildDate>${ posts[0].timestamp().toUTCString() }</lastBuildDate>
         ${items}
     </channel>
     </rss>

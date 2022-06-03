@@ -10,10 +10,12 @@
             if (!response.error) {
                 return {
                     props: {
+                        id: params.id,
                         title: response.title,
                         image: response.image,
                         content: response.content,
                         timestamp: new Date(response.timestamp),
+                        published: response.published
                     },
                 };
             } else {
@@ -30,10 +32,12 @@
 
                 return {
                     props: {
+                        id: firstResult._id,
                         title: firstResult.title,
                         image: firstResult.image,
                         content: firstResult.content,
                         timestamp: new Date(firstResult.timestamp),
+                        published: firstResult.published
                     },
                 };
             }
@@ -48,23 +52,28 @@
 </script>
 
 <script lang="ts">
-    import PostLoading from "$lib/components/PostLoading.svelte";
-    import ErrorBlock from "$lib/components/ErrorBlock.svelte";
     import removeMarkdown from "remove-markdown";
     import { fade } from "svelte/transition";
-    import { ArrowUp, Icon } from "svelte-hero-icons";
-    import { onMount } from "svelte";
+    import { ArrowUp, Globe, Icon } from "svelte-hero-icons";
+    import { onDestroy, onMount } from "svelte";
     import { toHTML } from "$lib/renderer/markdown";
+    import axios from "axios";
+    import PostLoading from "$lib/components/PostLoading.svelte";
+    import ErrorBlock from "$lib/components/Block.svelte";
+    import Block from "$lib/components/Block.svelte";
 
+    export let id: string;
     export let title: string;
     export let image: string;
     export let content: string;
     export let timestamp: Date;
+    export let published: boolean;
 
     let errors: string[] = [];
     let metaDescription: string = removeMarkdown(content);
 
     let showBackToTop = false;
+    let refreshing = false;
 
     const BACK_TO_TOP_FEATURE =
         import.meta.env.VITE_BACK_TO_TOP == null
@@ -81,6 +90,8 @@
             ? true
             : import.meta.env.VITE_SHOW_POST_ENDING === "true";
 
+    let realtimeUpdatesInterval: NodeJS.Timer | undefined;
+
     // The OpenGraph specifications indicate 1-2 sentences instead of 165 characters.
     // https://ogp.me/#optional
     metaDescription = metaDescription.split('.', 2).join('.') + "."; 
@@ -90,6 +101,40 @@
             showBackToTop = window.scrollY > 300;
 
             window.onscroll = () => (showBackToTop = window.scrollY > 300);
+        }
+
+        if (!published) {
+            realtimeUpdatesInterval = setInterval(() => {
+                refreshing = true;
+                axios.get(`/api/posts/${id}`).then(result => {
+                    setTimeout(() => {
+                        if (title !== result.data.title) {
+                            title = result.data.title;
+                        }
+
+                        if (content !== result.data.content) {
+                            content = result.data.content;
+                        }
+
+                        if (image !== result.data.image) {
+                            image = result.data.image;
+                        }
+                    
+                        refreshing = false;
+                    }, 2500);
+                }).catch(err => {
+                    errors = [
+                        "Failed to request content changes for real-time updates, please reload."
+                    ]
+                })
+            }, 7000);
+        }
+    });
+
+    onDestroy(() => {
+        if (realtimeUpdatesInterval) {
+            clearInterval(realtimeUpdatesInterval);
+            realtimeUpdatesInterval = undefined;
         }
     });
 
@@ -154,6 +199,12 @@
             <Icon src={ArrowUp} class="h-8 w-8 flex-shrink-0" solid />
         </div>
     </button>
+{/if}
+{#if refreshing}
+<Block>
+    <Icon src={Globe} solid class="h-5 w-5 flex-shrink-0 animate-pulse"></Icon>
+    <p class="text-xs animate-pulse">Checking for new content...</p>
+</Block>
 {/if}
 <div class="flex flex-col gap-4" id="contentContainer">
     {#if title && image && content}

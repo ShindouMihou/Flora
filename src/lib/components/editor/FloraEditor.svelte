@@ -13,8 +13,9 @@
         Trash,
         X,
     } from "svelte-hero-icons";
-    import ErrorBlock from "../ErrorBlock.svelte";
+    import ErrorBlock from "../Block.svelte";
     import { fade } from "svelte/transition";
+import Block from "../Block.svelte";
 
     export let postId: string | null = null;
     let initialLoading = false;
@@ -329,25 +330,10 @@
     {/each}
 {/if}
 {#if showSaving}
-    <div
-        class="fixed bottom-5 md:bottom-5 left-5 md:left-14 print:hidden"
-        transition:fade
-    >
-        <div
-            id="saving-context"
-            class="flex flex-row justify-between items-center w-full dark:bg-black bg-white  p-4 mb-4 
-                dark:text-white shadow-xl dark:shadow-none dark:border-green-500 dark:border rounded"
-        >
-            <div class="flex flex-row gap-2 items-center">
-                <Icon
-                    src={Cloud}
-                    solid
-                    class="text-green-500 w-[1.2rem] flex-shrink-0"
-                />
-                <p class="text-sm">Saving...</p>
-            </div>
-        </div>
-    </div>
+<Block>
+    <Icon src={Cloud} solid class="h-5 w-5 flex-shrink-0 animate-pulse"></Icon>
+    <p class="text-xs animate-pulse">Saving...</p>
+</Block>
 {/if}
 {#if postId !== null && !initialLoading}
     <div class="min-h-screen bg-neutral-900 text-white opensans">

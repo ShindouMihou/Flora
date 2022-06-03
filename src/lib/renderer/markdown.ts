@@ -18,6 +18,31 @@ const renderer = {
             </h${level}/>
         </a>
         `)
+    },
+    image(href: string | null, title: string | null, text: string) {
+        href = cleanUrl(href)
+
+        if (href === null) {
+            return text;
+        }
+
+        const attributes = [
+            `src="${href}"`,
+            `alt="${text}"`
+        ]
+
+        if (title) {
+            attributes.push(`title="${title}"`);
+        }
+
+        return (`
+        <div class="m-auto flex flex-col gap-1 pb-2 text-sm text-slate-400 text-center">
+            <a href="${href}" target="_blank" rel="external" class="hover:cursor-zoom-in">
+                <img ${attributes.join(' ')}/>
+            </a>
+            ${text}
+        </div>
+        `)
     }
 }
 
@@ -52,4 +77,17 @@ export function toHTML(text: string): MarkdownResult {
             content: undefined
         }
     }
+}
+
+function cleanUrl(href: string | null) {
+    if (href === null) {
+        return null;
+    }
+
+    try {
+      href = encodeURI(href).replace(/%25/g, '%');
+    } catch (e) {
+      return null;
+    }
+    return href;
 }

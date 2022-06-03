@@ -89,7 +89,11 @@
     }
 
     .mkdown blockquote {
-        @apply p-6 px-12 border-l-neutral-600 border-l-4 bg-neutral-800 my-4;
+        @apply p-6 px-12 border-l-neutral-600 border-l-8 bg-neutral-800 my-4;
+    }
+
+    .mkdown blockquote p {
+        @apply mb-0 text-white;
     }
 
     .mkdown img {

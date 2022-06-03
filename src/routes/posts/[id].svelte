@@ -76,6 +76,11 @@
             ? false
             : import.meta.env.VITE_DISALLOW_SELECT_CODEBLOCKS === "true";
 
+    const SHOW_POST_ENDING =
+        import.meta.env.VITE_SHOW_POST_ENDING == null
+            ? true
+            : import.meta.env.VITE_SHOW_POST_ENDING === "true";
+
     // The OpenGraph specifications indicate 1-2 sentences instead of 165 characters.
     // https://ogp.me/#optional
     metaDescription = metaDescription.split('.', 2).join('.') + "."; 
@@ -174,6 +179,17 @@
         <div class="mkdown flex flex-col gap-1 opensans">
             {@html html(content)}
         </div>
+        {#if SHOW_POST_ENDING}
+        <hr>
+        <div class="flex flex-col">
+            <h1 id="postTitleEnding" class="text-md font-semibold monst">
+                {title}
+            </h1>
+            <p id="postAuthorEnding" class="text-xs font-semibold monst text-gray-500">
+                {import.meta.env.VITE_DISPLAY_NAME}
+            </p>
+        </div>
+        {/if}
     {:else}
         <PostLoading />
     {/if}

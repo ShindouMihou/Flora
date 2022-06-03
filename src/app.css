@@ -93,7 +93,7 @@
     }
 
     .mkdown img {
-        @apply max-w-[35%] align-middle;
+        @apply rounded shadow align-middle;
     }
 
     .mkdown hr {

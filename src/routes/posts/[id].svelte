@@ -59,7 +59,7 @@
     import { toHTML } from "$lib/renderer/markdown";
     import axios from "axios";
     import PostLoading from "$lib/components/PostLoading.svelte";
-    import ErrorBlock from "$lib/components/Block.svelte";
+    import ErrorBlock from "$lib/components/ErrorBlock.svelte";
     import Block from "$lib/components/Block.svelte";
 
     export let id: string;

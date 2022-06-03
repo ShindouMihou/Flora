@@ -13,9 +13,8 @@
         Trash,
         X,
     } from "svelte-hero-icons";
-    import ErrorBlock from "../Block.svelte";
-    import { fade } from "svelte/transition";
-import Block from "../Block.svelte";
+    import ErrorBlock from "../ErrorBlock.svelte";
+    import Block from "../Block.svelte";
 
     export let postId: string | null = null;
     let initialLoading = false;

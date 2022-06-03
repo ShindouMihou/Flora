@@ -2,7 +2,6 @@
     import { Annotation, Icon } from "svelte-hero-icons";
 
     export let message: string;
-    
 </script>
 
 <div id="error-block" class="flex flex-row justify-between items-center w-full bg-red-200 p-2 mb-4 text-black rounded-sm">

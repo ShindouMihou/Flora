@@ -70,7 +70,10 @@
     export let published: boolean;
 
     let errors: string[] = [];
-    let metaDescription: string = removeMarkdown(content);
+    
+    let cleansedContent = removeMarkdown(content);
+    let metaDescription: string = cleansedContent;
+    let wordCount = cleansedContent.split(/\s+/).length.toString();
 
     let showBackToTop = false;
     let refreshing = false;
@@ -206,20 +209,22 @@
     <p class="text-xs animate-pulse">Checking for new content...</p>
 </Block>
 {/if}
-<div class="flex flex-col gap-4" id="contentContainer">
+<article class="flex flex-col gap-4" id="contentContainer" itemscope itemtype="https://schema.org/Article">
     {#if title && image && content}
+        <meta itemprop="wordCount" content="{wordCount}"/>
         <img
             src={image}
+            itemprop="image"
             alt="Thumbnail"
             class="w-full h-96 object-cover rounded"
         />
         <div class="flex flex-col" id="titles">
-            <h1 id="postTitle" class="text-4xl font-bold monst">{title}</h1>
+            <h1 id="postTitle" class="text-4xl font-bold monst" itemprop="name">{title}</h1>
             <p
                 id="postAuthor"
                 class="text-md font-semibold monst text-gray-500"
             >
-                {import.meta.env.VITE_DISPLAY_NAME} • {timestamp.toLocaleDateString(
+                <span itemprop="author">{import.meta.env.VITE_DISPLAY_NAME}</span> • {timestamp.toLocaleDateString(
                     "en-US",
                     {
                         dateStyle: "medium",
@@ -227,7 +232,7 @@
                 )}
             </p>
         </div>
-        <div class="mkdown flex flex-col gap-1 opensans">
+        <div class="mkdown flex flex-col gap-1 opensans" itemprop="articleBody">
             {@html html(content)}
         </div>
         {#if SHOW_POST_ENDING}
@@ -244,4 +249,4 @@
     {:else}
         <PostLoading />
     {/if}
-</div>
+</article>

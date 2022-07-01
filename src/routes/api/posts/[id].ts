@@ -54,7 +54,7 @@ export async function post(event: RequestEvent) {
                 softClone.published = body.published;
             }
 
-            if (softClone.slug != null) {
+            if (softClone.slug) {
                 softClone.slug = encodeURI(softClone.slug)
             }
 

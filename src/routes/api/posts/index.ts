@@ -65,7 +65,7 @@ export async function put(event: RequestEvent) {
                 return FloraicResponses.INVALID_REQUEST;
 
             let slug: string | null = null
-            if (body.slug != null) {
+            if (body.slug) {
                 if (typeof body.slug !== 'string') return FloraicResponses.INVALID_REQUEST;
                 slug = encodeURI(body.slug)
             }

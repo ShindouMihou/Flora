@@ -33,11 +33,17 @@
             axios
                 .get("/api/posts/" + postId)
                 .then((result) => {
+                    postId = result.data._id;
                     image = result.data.image;
                     title = result.data.title;
                     content = result.data.content;
                     published = result.data.published;
                     slug = result.data.slug ?? "";
+
+                    let url = new URL(window.location.toString());
+                    url.pathname = "/editor/" + postId;
+                    window.history.pushState({}, "", url);
+                    
                     initialLoading = true;
                 })
                 .catch((error) => {

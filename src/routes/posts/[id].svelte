@@ -10,12 +10,13 @@
             if (!response.error) {
                 return {
                     props: {
-                        id: params.id,
+                        id: response._id,
                         title: response.title,
                         image: response.image,
                         content: response.content,
                         timestamp: new Date(response.timestamp),
-                        published: response.published
+                        published: response.published,
+                        slug: response.slug
                     },
                 };
             } else {
@@ -37,7 +38,8 @@
                         image: firstResult.image,
                         content: firstResult.content,
                         timestamp: new Date(firstResult.timestamp),
-                        published: firstResult.published
+                        published: firstResult.published,
+                        slug: firstResult.slug
                     },
                 };
             }
@@ -68,6 +70,7 @@
     export let content: string;
     export let timestamp: Date;
     export let published: boolean;
+    export let slug: string | null;
 
     let errors: string[] = [];
     
@@ -100,6 +103,12 @@
     metaDescription = metaDescription.split('.', 2).join('.') + "."; 
 
     onMount(() => {
+        if (slug) {
+            let url = new URL(window.location.toString());
+            url.pathname = "/posts/" + slug;
+            window.history.pushState({}, "", url);
+        }
+        
         if (BACK_TO_TOP_FEATURE) {
             showBackToTop = window.scrollY > 300;
 
@@ -121,6 +130,14 @@
 
                         if (image !== result.data.image) {
                             image = result.data.image;
+                        }
+
+                        if (slug !== result.data.slug) {
+                            slug = result.data.slug
+
+                            let url = new URL(window.location.toString());
+                            url.pathname = "/posts/" + slug;
+                            window.history.pushState({}, "", url);
                         }
                     
                         refreshing = false;

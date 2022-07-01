@@ -5,9 +5,13 @@ import { ObjectId } from "mongodb";
 
 export async function get(event: RequestEvent) {
 
-    if (!ObjectId.isValid(event.params.id)) return FloraicResponses.INVALID_RESOURCE_PARAMTERS;
+    let post: Post | null;
 
-    const post = await Post.withId(event.params.id)
+    if (!ObjectId.isValid(event.params.id)) {
+        post = await Post.withSlug(event.params.id); 
+    } else {
+        post = await Post.withId(event.params.id); 
+    }
 
     if (!post) return FloraicResponses.INVALID_RESOURCE;
 
@@ -22,7 +26,8 @@ export async function get(event: RequestEvent) {
 const SUPPORTED_ELEMENTS = [
     "title",
     "content",
-    "image"
+    "image",
+    "slug"
 ]
 
 export async function post(event: RequestEvent) {
@@ -47,6 +52,10 @@ export async function post(event: RequestEvent) {
 
             if (body.published != null && typeof body.published === 'boolean') {
                 softClone.published = body.published;
+            }
+
+            if (softClone.slug != null) {
+                softClone.slug = encodeURI(softClone.slug)
             }
 
             if (!(softClone.image.startsWith('https://') || softClone.image.startsWith('http://')))

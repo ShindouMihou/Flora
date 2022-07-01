@@ -8,13 +8,15 @@ export default class Post implements FloraModel {
     title: string;
     content: string;
     published: boolean;
+    slug: string | null;
 
-    constructor(_id: string, title: string, image: string | null, content: string, published: boolean = true) {
+    constructor(_id: string, title: string, image: string | null, content: string, published: boolean = true, slug: string | null) {
         this._id = _id;
         this.image = image;
         this.title = title;
         this.content = content;
         this.published = published;
+        this.slug = slug;
     }
 
     public timestamp() {
@@ -24,6 +26,7 @@ export default class Post implements FloraModel {
     private static collection() {
         return mongo.getClient().then(client => {
             client!.db('flora').collection('posts').createIndex({ title: 'text' });
+            client!.db('flora').collection('posts').createIndex({ slug: -1 });
 
             return client!.db('flora').collection('posts')
         })
@@ -117,7 +120,7 @@ export default class Post implements FloraModel {
      */
     public static async all(published: boolean = true): Promise<Post[]> {
         return Post.collection().then(collection => collection.find(Post.createBody(published = published))
-        .map(result => new Post(result._id.toString(), result.title, result.image, result.content, result.published ?? true))
+        .map(result => new Post(result._id.toString(), result.title, result.image, result.content, result.published ?? true, result.slug ?? null))
         .sort({ _id: -1})
         .toArray())
     }
@@ -132,7 +135,7 @@ export default class Post implements FloraModel {
                 }
             })
             .sort({ _id: -1})
-            .map(result => new Post(result._id.toString(), result.title, result.image, result.content, result.published ?? true));
+            .map(result => new Post(result._id.toString(), result.title, result.image, result.content, result.published ?? true, result.slug ?? null));
 
             if (limit == null) {
                 return cursor.toArray();
@@ -154,7 +157,7 @@ export default class Post implements FloraModel {
                 $lt: post
             }
         })
-        .map(result => new Post(result._id.toString(), result.title, result.image, result.content, result.published ?? true))
+        .map(result => new Post(result._id.toString(), result.title, result.image, result.content, result.published ?? true, result.slug ?? null))
         .limit(limit)
         .sort(
             sort === 'latest'
@@ -180,7 +183,7 @@ export default class Post implements FloraModel {
                     $gt: post
                 }
             })
-            .map(result => new Post(result._id.toString(), result.title, result.image, result.content, result.published ?? true))
+            .map(result => new Post(result._id.toString(), result.title, result.image, result.content, result.published ?? true, result.slug ?? null))
             .limit(limit)
             .sort(
                 sort === 'latest'
@@ -205,7 +208,25 @@ export default class Post implements FloraModel {
             _id: new ObjectId(id)
         })).then(result => {
             if (result) {
-                return new Post(result._id.toString(), result.title, result.image, result.content, result.published ?? true)
+                return new Post(result._id.toString(), result.title, result.image, result.content, result.published ?? true, result.slug ?? null)
+            }
+
+            return null
+        });
+    }
+
+    /**
+     * Finds one post that matches the slug given.
+     * 
+     * @param id The id of the post to get.
+     * @returns A {@link Post} object with the data from the database.
+     */
+     public static async withSlug(slug: string): Promise<Post | null> {
+        return Post.collection().then(collection => collection.findOne({
+            slug: slug
+        })).then(result => {
+            if (result) {
+                return new Post(result._id.toString(), result.title, result.image, result.content, result.published ?? true, result.slug ?? null)
             }
 
             return null
@@ -220,8 +241,8 @@ export default class Post implements FloraModel {
      * @param content The content of the post to create.
      * @returns A simple {@link Post} object.
      */
-    public static async create(title: string, image: string | null, content: string, published: boolean): Promise<Post> {
-        const post = new Post('', title, image, content, published)
+    public static async create(title: string, image: string | null, content: string, published: boolean, slug: string | null): Promise<Post> {
+        const post = new Post('', title, image, content, published, slug)
 
         return Post.collection().then(collection => collection.insertOne(post.without('_id'))).then(result => {
             post._id = result.insertedId.toString();

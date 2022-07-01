@@ -56,11 +56,11 @@
 <div class="flex flex-col gap-4">
     {#if posts}
         {#if posts.length > 0}
-        <PostDisplay id={posts[0]._id} image={posts[0].image ?? ""} title={posts[0].title}></PostDisplay>
+        <PostDisplay id={posts[0].slug ?? posts[0]._id} image={posts[0].image ?? ""} title={posts[0].title}></PostDisplay>
             <div id="posts" class="flex flex-col 2xl:grid 2xl:grid-cols-4 gap-4">
                 {#each posts as post, i}
                     {#if i !== 0}
-                    <PostDisplay id={post._id} image={post.image ?? ""} title={post.title}></PostDisplay>
+                    <PostDisplay id={post.slug ?? post._id} image={post.image ?? ""} title={post.title}></PostDisplay>
                     {/if}
                 {/each}
             </div>

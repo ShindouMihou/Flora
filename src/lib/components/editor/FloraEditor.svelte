@@ -22,6 +22,7 @@
     let image: string = "";
     let title: string = "";
     let content = "";
+    let slug: string = "";
     let published: boolean = false;
 
     let translatedContent = "";
@@ -36,6 +37,7 @@
                     title = result.data.title;
                     content = result.data.content;
                     published = result.data.published;
+                    slug = result.data.slug ?? "";
                     initialLoading = true;
                 })
                 .catch((error) => {
@@ -207,6 +209,7 @@
                     image: image,
                     content: content,
                     published: published,
+                    slug: slug
                 })
                 .then((result) => {
                     initialLoading = true;
@@ -250,6 +253,7 @@
                     image: image,
                     content: content,
                     published: published,
+                    slug: slug
                 })
                 .then((result) => {
                     lock = false;
@@ -405,6 +409,13 @@
                         class="outline-none opensans border p-4 duration-[250ms] w-full dark:text-black dark:focus:bg-white dark:focus:text-black focus:bg-black focus:text-white"
                         placeholder="Post Image"
                         bind:value={image}
+                    />
+                    <input
+                        type="text"
+                        disabled={lock}
+                        class="outline-none opensans border p-4 duration-[250ms] w-full dark:text-black dark:focus:bg-white dark:focus:text-black focus:bg-black focus:text-white"
+                        placeholder="Post Slug"
+                        bind:value={slug}
                     />
                 </div>
                 <div

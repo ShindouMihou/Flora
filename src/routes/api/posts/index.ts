@@ -42,7 +42,8 @@ export async function get(event: RequestEvent) {
 const SUPPORTED_ELEMENTS = [
     "title",
     "content",
-    "image"
+    "image",
+    "slug"
 ]
 
 export async function put(event: RequestEvent) {
@@ -63,7 +64,14 @@ export async function put(event: RequestEvent) {
             if (!(body.image.startsWith('https://') || body.image.startsWith('http://')))
                 return FloraicResponses.INVALID_REQUEST;
 
-            const post = await Post.create(body.title, body.image, body.content, body.published)
+            let slug: string | null = null
+            if (body.slug != null) {
+                if (typeof body.slug !== 'string') return FloraicResponses.INVALID_REQUEST;
+                slug = encodeURI(body.slug)
+            }
+
+
+            const post = await Post.create(body.title, body.image, body.content, body.published, slug)
             
             return {
                 body: post,

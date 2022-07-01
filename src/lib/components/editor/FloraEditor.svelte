@@ -219,6 +219,7 @@
                     url.pathname = "/editor/" + postId;
                     window.history.pushState({}, "", url);
                     lock = false;
+                    errors = []
                     setTimeout(() => (showSaving = false), 1500);
                 })
                 .catch((error) => {
@@ -258,6 +259,7 @@
                 .then((result) => {
                     lock = false;
                     setTimeout(() => (showSaving = false), 1500);
+                    errors = []
                 })
                 .catch((error) => {
                     setTimeout(() => {

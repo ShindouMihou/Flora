@@ -48,7 +48,7 @@ const itemify = (origin: string, post: Post) => {
     <item>
         <title>${post.title}</title>
         <description>${post.content.split('.', 2).join('.') + "."}</description>
-        <link>${formatOrigin(origin, "posts/" + post._id)}</link>
+        <link>${formatOrigin(origin, "posts/" + (post.slug ?? post._id))}</link>
         <dc:creator>${import.meta.env.VITE_DISPLAY_NAME}</dc:creator>
         <pubDate>${ post.timestamp().toUTCString() }</pubDate>
     </item>

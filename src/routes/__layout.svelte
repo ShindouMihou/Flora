@@ -12,6 +12,8 @@
   import "../app.css";
   import { Adjustments, Folder, Heart, Icon, X } from 'svelte-hero-icons'
   import { onMount } from "svelte";
+  import { navigating } from "$app/stores"
+  import { fade } from "svelte/transition"
 
   let bannerVisibility = 'false';
   let settings = "hidden";
@@ -53,6 +55,11 @@
 </svelte:head>
 
 
+{#if $navigating}
+<div id="loader" class="h-screen w-screen m-auto p-12 align-middle justify-center flex flex-row items-center bg-white dark:bg-black dark:text-white" transition:fade>
+  <h1 class="text-5xl vibes lowercase animate-bounce dark:text-white">{import.meta.env.VITE_APP_NAME}</h1>
+</div>
+{:else}
 <div id="container" class="py-6 px-6 md:px-44 flex flex-col w-full m-auto max-w-[2168px] bg-white dark:bg-black dark:text-white">
   {#if bannerVisibility === 'true'}
   <div id="made-with-flora" class="flex flex-row justify-between items-center w-full bg-blue-200 p-2 mb-4 text-black rounded-sm print:hidden">
@@ -103,3 +110,4 @@
     <slot></slot>
   </main>
 </div>
+{/if}

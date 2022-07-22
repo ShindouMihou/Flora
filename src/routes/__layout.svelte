@@ -36,8 +36,26 @@
       window.onscroll = () => (showBackToTop = window.scrollY > 300);
     }
 
-    darkMode = localStorage.getItem("theme") === 'dark' || (import.meta.env.VITE_DARK_MODE === 'true' ?? false);
-    focusMode = localStorage.getItem("focus") === 'true' || (import.meta.env.VITE_FOCUS_MODE === 'true' ?? false);
+    if (localStorage.getItem("focus") == null) {
+      localStorage.setItem("focus", import.meta.env.VITE_FOCUS_MODE)
+    }
+    
+    if (!localStorage.getItem("theme") == null) {
+      localStorage.setItem("focus", import.meta.env.VITE_DARK_MODE === 'true' ? 'dark' : 'light')
+    }
+
+    darkMode = localStorage.getItem("theme") === 'dark';
+    focusMode = localStorage.getItem("focus") === 'true';
+
+    if (focusMode) {
+			document.body.classList.add('bg-black')
+		} else {
+			document.body.classList.add('bg-white', 'dark:bg-black')
+		}
+
+    if (darkMode) {
+			document.documentElement.classList.add('dark');
+		}
 
     bannerVisibility = localStorage.getItem('floraBanner') ?? (import.meta.env.VITE_FLORA_BANNER ?? 'true')
   });

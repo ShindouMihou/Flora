@@ -85,7 +85,7 @@
     </a>
     {#if posts}
         {#if posts.length > 0}
-            <div id="posts" class="flex flex-col 2xl:grid 2xl:grid-cols-4 gap-4">
+            <div id="posts" class="flex flex-col lg:grid lg:grid-cols-2 gap-4">
                 {#each posts as post, i}
                 <PostDisplay location="editor/" id={post._id} image={post.image ?? ""} title={post.title}></PostDisplay>
                 {/each}
@@ -94,8 +94,7 @@
         <PostDisplayNone></PostDisplayNone>
         {/if}
     {:else}
-    <PostDisplayLoading></PostDisplayLoading>
-    <div id="posts" class="flex flex-col 2xl:grid 2xl:grid-cols-4 gap-4">
+    <div id="posts" class="flex flex-col lg:grid lg:grid-cols-2 gap-4">
         {#each { length: 10 } as _, __}
             <PostDisplayLoading></PostDisplayLoading>
         {/each}

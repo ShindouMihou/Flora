@@ -1,4 +1,5 @@
-![image](https://user-images.githubusercontent.com/69381903/170856789-89035499-6171-4ab3-b80f-5f873d92a57b.png)
+![Flora_Banner](https://user-images.githubusercontent.com/69381903/180498212-ecb98705-6d2b-4645-b83b-9b89a831b00b.png)
+
 <div align="center">
 A simple, markdown-based blog platform written completely in Typescript, Sveltekit and Tailwind.
 </div>

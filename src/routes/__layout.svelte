@@ -60,7 +60,7 @@
   <h1 class="text-5xl vibes lowercase animate-bounce dark:text-white">{import.meta.env.VITE_APP_NAME}</h1>
 </div>
 {:else}
-<div id="container" class="py-6 px-6 md:px-44 flex flex-col w-full m-auto max-w-[2168px] bg-white dark:bg-black dark:text-white">
+<div id="container" class="py-6 px-6 lg:px-44 flex flex-col w-full m-auto max-w-[1368px] bg-white dark:bg-black dark:text-white">
   {#if bannerVisibility === 'true'}
   <div id="made-with-flora" class="flex flex-row justify-between items-center w-full bg-blue-200 p-2 mb-4 text-black rounded-sm print:hidden">
     <a class="flex flex-row gap-1 items-center" href="https://github.com/ShindouMihou/Flora" rel="external" target="_blank">

@@ -156,6 +156,9 @@
             clearInterval(realtimeUpdatesInterval);
             realtimeUpdatesInterval = undefined;
         }
+
+        showBackToTop = false;
+        window.onscroll = () => {};
     });
 
     function backToTop() {

@@ -57,7 +57,7 @@
     {#if posts}
         {#if posts.length > 0}
         <PostDisplay id={posts[0].slug ?? posts[0]._id} image={posts[0].image ?? ""} title={posts[0].title}></PostDisplay>
-            <div id="posts" class="flex flex-col 2xl:grid 2xl:grid-cols-4 gap-4">
+            <div id="posts" class="flex flex-col lg:grid lg:grid-cols-2 gap-4">
                 {#each posts as post, i}
                     {#if i !== 0}
                     <PostDisplay id={post.slug ?? post._id} image={post.image ?? ""} title={post.title}></PostDisplay>
@@ -69,7 +69,7 @@
         {/if}
     {:else}
     <PostDisplayLoading></PostDisplayLoading>
-    <div id="posts" class="flex flex-col 2xl:grid 2xl:grid-cols-4 gap-4">
+    <div id="posts" class="flex flex-col lg:grid lg:grid-cols-2 gap-4">
         {#each { length: 10 } as _, __}
             <PostDisplayLoading></PostDisplayLoading>
         {/each}

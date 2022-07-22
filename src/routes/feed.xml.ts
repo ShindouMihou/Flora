@@ -2,7 +2,7 @@ import configuration from "$lib/configuration";
 import Post from "$lib/models/post";
 import type { RequestEvent } from "@sveltejs/kit";
 
-export async function get(event: RequestEvent) {
+export async function GET(event: RequestEvent) {
     let origin = configuration('ORIGIN')
 
     if (!origin) {

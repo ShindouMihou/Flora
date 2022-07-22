@@ -3,7 +3,7 @@ import FloraicResponses from "$lib/responses/basic";
 import type { RequestEvent } from "@sveltejs/kit";
 import { ObjectId } from "mongodb";
 
-export async function get(event: RequestEvent) {
+export async function GET(event: RequestEvent) {
 
     let post: Post | null;
 
@@ -30,7 +30,7 @@ const SUPPORTED_ELEMENTS = [
     "slug"
 ]
 
-export async function post(event: RequestEvent) {
+export async function POST(event: RequestEvent) {
     if (!event.locals.authenticated) return FloraicResponses.UNAUTHORIZED;
     if (!ObjectId.isValid(event.params.id)) return FloraicResponses.INVALID_RESOURCE_PARAMTERS;
 
@@ -76,7 +76,7 @@ export async function post(event: RequestEvent) {
     }
 }
 
-export async function del(event: RequestEvent) {
+export async function DELETE(event: RequestEvent) {
     try {
 
         if (!event.locals.authenticated) return FloraicResponses.UNAUTHORIZED;

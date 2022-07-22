@@ -5,7 +5,7 @@ import type { RequestEvent } from "@sveltejs/kit";
 const POSTS_PER_REQUEST = 10;
 const SORTING_ORDER = 'latest'
 
-export async function get(event: RequestEvent) {
+export async function GET(event: RequestEvent) {
     let published = true;
 
     if (event.url.searchParams.get('includeDrafts') != null && event.locals.authenticated) {
@@ -46,7 +46,7 @@ const SUPPORTED_ELEMENTS = [
     "slug"
 ]
 
-export async function put(event: RequestEvent) {
+export async function PUT(event: RequestEvent) {
     if (!event.locals.authenticated) return FloraicResponses.UNAUTHORIZED;
 
     try {

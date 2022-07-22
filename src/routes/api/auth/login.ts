@@ -4,7 +4,7 @@ import FloraicResponses from "$lib/responses/basic";
 import type { RequestEvent } from "@sveltejs/kit";
 import cookieSignature from 'cookie-signature';
 
-export async function post(event: RequestEvent) {
+export async function POST(event: RequestEvent) {
     if (event.locals.authenticated) return FloraicResponses.UNAUTHORIZED;
 
     try {

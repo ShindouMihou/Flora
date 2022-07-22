@@ -13,7 +13,14 @@
 			document.documentElement.classList.add('dark');
 		}
 	</script>
-	<body class="bg-white dark:bg-black">
+	<body>
 		<div>%sveltekit.body%</div>
 	</body>
+	<script>
+		if (localStorage.getItem('focus') === 'true') {
+			document.body.classList.add('bg-black')
+		} else {
+			document.body.classList.add('bg-white', 'dark:bg-black')
+		}
+	</script>
 </html>

@@ -55,8 +55,7 @@
 
 <script lang="ts">
     import removeMarkdown from "remove-markdown";
-    import { fade } from "svelte/transition";
-    import { ArrowUp, Globe, Icon } from "svelte-hero-icons";
+    import { Globe, Icon } from "svelte-hero-icons";
     import { onDestroy, onMount } from "svelte";
     import { toHTML } from "$lib/renderer/markdown";
     import axios from "axios";
@@ -78,13 +77,7 @@
     let metaDescription: string = cleansedContent;
     let wordCount = cleansedContent.split(/\s+/).length.toString();
 
-    let showBackToTop = false;
     let refreshing = false;
-
-    const BACK_TO_TOP_FEATURE =
-        import.meta.env.VITE_BACK_TO_TOP == null
-            ? true
-            : import.meta.env.VITE_BACK_TO_TOP === "true";
 
     const DISALLOW_SELECT_CODEBLOCKS =
         import.meta.env.VITE_DISALLOW_SELECT_CODEBLOCKS == null
@@ -107,12 +100,6 @@
             let url = new URL(window.location.toString());
             url.pathname = "/posts/" + slug;
             window.history.pushState({}, "", url);
-        }
-        
-        if (BACK_TO_TOP_FEATURE) {
-            showBackToTop = window.scrollY > 300;
-
-            window.onscroll = () => (showBackToTop = window.scrollY > 300);
         }
 
         if (!published) {
@@ -167,15 +154,7 @@
             clearInterval(realtimeUpdatesInterval);
             realtimeUpdatesInterval = undefined;
         }
-
-        showBackToTop = false;
     });
-
-    function backToTop() {
-        document.getElementById("container")!.scrollIntoView({
-            behavior: "smooth",
-        });
-    }
 
     function html(content: string) {
         const translated = toHTML(content);
@@ -219,19 +198,6 @@
     {#each errors as error}
         <ErrorBlock message={error} />
     {/each}
-{/if}
-{#if showBackToTop}
-    <button
-        class="fixed bottom-5 md:bottom-10 right-5 md:right-16 print:hidden"
-        on:click={backToTop}
-        transition:fade
-    >
-        <div
-            class="p-3 bg-neutral-300 opacity-50 rounded-lg border border-transparent hover:border-blue-500 duration-[250ms]"
-        >
-            <Icon src={ArrowUp} class="h-8 w-8 flex-shrink-0" solid />
-        </div>
-    </button>
 {/if}
 {#if refreshing}
 <Block>

@@ -27,6 +27,9 @@
             ? true
             : import.meta.env.VITE_BACK_TO_TOP === "true";
 
+  $: containerState = $navigating ? 'hidden' : ''
+  $: loaderState = $navigating ? '' : 'hidden'
+
   export let authenticated: boolean;
 
   onMount(() => {
@@ -95,14 +98,12 @@
 </svelte:head>
 
 
-{#if $navigating}
-<div id="loader" class="h-screen w-screen m-auto p-12 align-middle justify-center max-w-[1368px] lg:px-44 flex flex-row items-center bg-white dark:bg-black dark:text-white" transition:fade>
+<div id="loader" class="{loaderState} h-screen w-screen m-auto p-12 align-middle justify-center max-w-[1368px] lg:px-44 flex flex-row items-center bg-white dark:bg-black dark:text-white" transition:fade>
   <h1 class="text-5xl vibes lowercase animate-bounce dark:text-white">{import.meta.env.VITE_APP_NAME}</h1>
 </div>
-{:else}
 {#if showBackToTop}
     <button
-        class="fixed bottom-5 md:bottom-10 right-5 lg:right-16 2xl:right-72 print:hidden"
+        class="{containerState} fixed bottom-5 md:bottom-10 right-5 lg:right-16 2xl:right-72 print:hidden"
         on:click={backToTop}
         transition:fade
     >
@@ -113,7 +114,7 @@
         </div>
     </button>
 {/if}
-<div id="container" class="min-h-screen py-6 px-6 lg:px-44 flex flex-col w-full m-auto max-w-[1368px] bg-white dark:bg-black dark:text-white">
+<div id="container" class="{containerState} min-h-screen py-6 px-6 lg:px-44 flex flex-col w-full m-auto max-w-[1368px] bg-white dark:bg-black dark:text-white">
   {#if bannerVisibility === 'true'}
   <div id="made-with-flora" class="flex flex-row justify-between items-center w-full bg-blue-200 p-2 mb-4 text-black rounded-sm print:hidden">
     <a class="flex flex-row gap-1 items-center" href="https://github.com/ShindouMihou/Flora" rel="external" target="_blank">
@@ -170,4 +171,3 @@
     <slot></slot>
   </main>
 </div>
-{/if}

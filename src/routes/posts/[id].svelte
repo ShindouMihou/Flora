@@ -132,12 +132,23 @@
                             image = result.data.image;
                         }
 
-                        if (slug !== result.data.slug) {
+                        if (result.data.slug !== '' && slug !== result.data.slug) {
                             slug = result.data.slug
 
                             let url = new URL(window.location.toString());
                             url.pathname = "/posts/" + slug;
                             window.history.pushState({}, "", url);
+                        }
+
+                        if (published !== result.data.published) {
+                            published = result.data.published;
+
+                            if (published && realtimeUpdatesInterval) {
+                                clearInterval(realtimeUpdatesInterval);
+                                realtimeUpdatesInterval = undefined;
+
+                                console.log('The content has been published, disengaging realtime updates.')
+                            }
                         }
                     
                         refreshing = false;
@@ -158,7 +169,6 @@
         }
 
         showBackToTop = false;
-        window.onscroll = () => {};
     });
 
     function backToTop() {

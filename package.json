@@ -41,7 +41,7 @@
     "cookie-signature": "^1.2.0",
     "dotenv": "^16.0.1",
     "highlight.js": "^11.5.1",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "lorem-ipsum": "^2.0.4",
     "marked": "^4.0.16",
     "mongodb": "^4.6.0",
